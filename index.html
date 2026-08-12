@@ -28,16 +28,16 @@ const SC="#C0392B";
 
 // ── Resource links ────────────────────────────────────────────
 const LINK = {
-  ta:      "https://technical-analysis-mu.vercel.app/",
-  chain:   "https://options-chain-decoder.vercel.app/",
-  calc:    "https://options-return-calculator-dm.vercel.app/",
+  ta:       "https://technical-analysis-mu.vercel.app/",
+  chain:    "https://options-chain-decoder.vercel.app/",
+  calc:     "https://options-return-calculator-dm.vercel.app/",
   checklist:"https://pre-trade-checklist.vercel.app/",
-  econ:    "https://university.financesdemystified.com/products/communities/v2/financesdemystified/channel/ff2c22e6-5003-4a10-8a34-2ab42f3e9b15?type=forum",
-  planner1:"https://kajabi-communities-documents.s3.us-west-2.amazonaws.com/d8082a79-cf09-476a-b7de-be557072222a",
+  econ:     "https://university.financesdemystified.com/products/communities/v2/financesdemystified/channel/ff2c22e6-5003-4a10-8a34-2ab42f3e9b15?type=forum",
+  planner1: "https://kajabi-communities-documents.s3.us-west-2.amazonaws.com/d8082a79-cf09-476a-b7de-be557072222a",
   planner23:"https://kajabi-communities-documents.s3.us-west-2.amazonaws.com/b0f3bd36-41da-46bb-bd7b-634990968879",
 };
 
-// ── Style data (from Dominique's survey answers) ─────────────
+// ── Style data ────────────────────────────────────────────────
 const STYLES = {
   scalp: {
     id:"scalp", label:"Scalp", color:SC,
@@ -146,9 +146,7 @@ const CHAIN_META = [
 
 // ── Shared components ─────────────────────────────────────────
 
-function DarkCallout({eyebrow,children}){return(<div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"12px",padding:"16px 20px",marginBottom:"16px"}}><div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"8px"}}>{eyebrow}</div><div style={{fontSize:"0.88rem",color:"#e8ddd0",lineHeight:"1.7"}}>{children}</div></div>);}
-
-function RuleBox({rule,color}){return(<div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"8px",padding:"11px 13px",marginBottom:"10px",borderLeft:"3px solid "+(color||OR)}}><div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.12em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"6px"}}>⚡ Dominique's Rule</div><div style={{fontSize:"0.78rem",lineHeight:"1.65",color:"#e8ddd0"}}>{rule}</div></div>);}
+function RuleBox({rule,color}){return(<div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"8px",padding:"11px 13px",marginBottom:"10px",borderLeft:"3px solid "+(color||OR)}}><div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.12em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"6px"}}>⚡ The Rule</div><div style={{fontSize:"0.78rem",lineHeight:"1.65",color:"#e8ddd0"}}>{rule}</div></div>);}
 
 function SectionLabel({label,sub,color}){return(<div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px",paddingBottom:"8px",borderBottom:"2px solid #e8ddd033"}}><div style={{width:"3px",height:"22px",background:color||OR,borderRadius:"2px"}}/><div><div style={{fontWeight:"700",fontSize:"0.88rem",color:DK}}>{label}</div>{sub&&<div style={{fontSize:"0.72rem",color:"#8a7560"}}>{sub}</div>}</div></div>);}
 
@@ -158,53 +156,53 @@ function GreenRed({green,red,greenLabel,redLabel}){return(<div className="g2" st
 
 function InfoCard({icon,title,color,children}){return(<div style={{background:CA,border:"1px solid "+BD,borderRadius:"12px",padding:"14px 16px",borderLeft:"4px solid "+color}}><div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"8px"}}><span style={{fontSize:"1.1rem"}}>{icon}</span><span style={{fontWeight:"700",fontSize:"0.82rem",color:DK}}>{title}</span></div><div style={{fontSize:"0.78rem",color:"#5a4535",lineHeight:"1.6"}}>{children}</div></div>);}
 
-// ── The repeating rhythm: Question → Decision → Action ────────
+// ── QDA — dark tab opener, one per tab ────────────────────────
 function QDA({question,options,action,color}){
   const c = color||OR;
-  const Arrow = () => (<div style={{textAlign:"center",color:"#c9b8a2",fontSize:"0.9rem",lineHeight:"1",padding:"2px 0"}}>↓</div>);
   return(
-    <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",padding:"16px 18px",marginBottom:"16px",borderLeft:"4px solid "+c}}>
-      <div style={{fontSize:"0.6rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"6px"}}>❓ The Question</div>
-      <div style={{fontFamily:"Georgia,serif",fontSize:"1.05rem",color:DK,lineHeight:"1.4",marginBottom:"10px"}}>{question}</div>
-      <Arrow/>
-      <div style={{fontSize:"0.6rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",margin:"8px 0 7px"}}>⚖️ The Decision</div>
-      <div style={{display:"flex",gap:"8px",alignItems:"center",flexWrap:"wrap",marginBottom:"6px"}}>
-        {options.map((o,i)=>(
-          <React.Fragment key={o}>
-            {i>0&&<span style={{fontSize:"0.7rem",color:"#b0a090",fontStyle:"italic"}}>or</span>}
-            <span style={{display:"inline-block",padding:"5px 14px",borderRadius:"999px",background:(i===0?c:"#8a7560")+"15",color:i===0?c:"#8a7560",fontSize:"0.75rem",fontWeight:"700",letterSpacing:"0.05em"}}>{o}</span>
-          </React.Fragment>
-        ))}
+    <div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"12px",padding:"18px 20px",marginBottom:"16px"}}>
+      <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"7px"}}>❓ The Question</div>
+      <div style={{fontFamily:"Georgia,serif",fontSize:"1.15rem",color:"#fff",lineHeight:"1.4",marginBottom:"13px"}}>{question}</div>
+
+      <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"13px"}}>
+        <span style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",flexShrink:0}}>⚖️ Decision</span>
+        <div style={{display:"flex",gap:"7px",alignItems:"center",flexWrap:"wrap"}}>
+          {options.map((o,i)=>(
+            <span key={o} style={{display:"inline-block",padding:"4px 13px",borderRadius:"999px",background:i===0?c:"rgba(255,255,255,0.08)",border:"1px solid "+(i===0?c:"rgba(255,255,255,0.16)"),color:i===0?"#fff":"#d4a87a",fontSize:"0.72rem",fontWeight:"700",letterSpacing:"0.04em"}}>{o}</span>
+          ))}
+        </div>
       </div>
-      <Arrow/>
-      <div style={{fontSize:"0.6rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",margin:"8px 0 6px"}}>✅ The Action</div>
-      <div style={{fontSize:"0.82rem",color:"#5a4535",lineHeight:"1.6"}}>{action}</div>
+
+      <div style={{borderTop:"1px solid rgba(255,255,255,0.09)",paddingTop:"12px"}}>
+        <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"6px"}}>✅ The Action</div>
+        <div style={{fontSize:"0.83rem",color:"#e8ddd0",lineHeight:"1.65"}}>{action}</div>
+      </div>
     </div>
   );
 }
 
-// ── Dominique's question callout ──────────────────────────────
+// ── Dominique's question — light, to contrast the dark blocks ─
 function DomQ({children}){
   return(
-    <div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"14px",padding:"18px 22px",margin:"18px 0 16px",display:"flex",gap:"14px",alignItems:"flex-start"}}>
-      <div style={{fontSize:"1.5rem",flexShrink:0,lineHeight:"1.2"}}>💬</div>
+    <div style={{background:CA,border:"1px solid "+BD,borderLeft:"4px solid "+GD,borderRadius:"12px",padding:"16px 18px",margin:"18px 0 14px",display:"flex",gap:"13px",alignItems:"flex-start"}}>
+      <div style={{fontSize:"1.3rem",flexShrink:0,lineHeight:"1.3"}}>💬</div>
       <div>
-        <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"7px"}}>Dominique's Question</div>
-        <div style={{fontFamily:"Georgia,serif",fontStyle:"italic",fontSize:"1.05rem",color:"#fff",lineHeight:"1.55"}}>"{children}"</div>
+        <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"6px"}}>Dominique's Question</div>
+        <div style={{fontFamily:"Georgia,serif",fontStyle:"italic",fontSize:"1rem",color:DK,lineHeight:"1.55"}}>"{children}"</div>
       </div>
     </div>
   );
 }
 
-// ── Resource link row ─────────────────────────────────────────
+// ── Resource links ────────────────────────────────────────────
 function Resources({items}){
   return(
-    <div style={{background:"#f7f0e6",border:"1px dashed #d9c9b2",borderRadius:"12px",padding:"14px 16px",marginTop:"16px"}}>
+    <div style={{background:CA,border:"1px solid "+BD,borderRadius:"12px",padding:"14px 16px",marginTop:"16px"}}>
       <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"10px"}}>🔗 Use these while you plan</div>
       <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
         {items.map(it=>(
           <a key={it.label} href={it.url} target="_blank" rel="noopener noreferrer"
-            style={{display:"inline-flex",alignItems:"center",gap:"7px",background:CA,border:"1px solid "+BD,borderRadius:"999px",padding:"7px 15px",textDecoration:"none",color:DK,fontSize:"0.76rem",fontWeight:"700",transition:"all 0.15s"}}
+            style={{display:"inline-flex",alignItems:"center",gap:"7px",background:"#f7f0e6",border:"1px solid "+BD,borderRadius:"999px",padding:"7px 15px",textDecoration:"none",color:DK,fontSize:"0.76rem",fontWeight:"700",transition:"all 0.15s"}}
             onMouseOver={e=>{e.currentTarget.style.borderColor=OR;e.currentTarget.style.color=OR;}}
             onMouseOut={e=>{e.currentTarget.style.borderColor=BD;e.currentTarget.style.color=DK;}}>
             <span>{it.icon}</span>{it.label}<span style={{color:"#b0a090",fontSize:"0.7rem"}}>↗</span>
@@ -235,7 +233,7 @@ function PlannerBridge(){
 
 function ChecklistBridge(){
   return(
-    <div style={{marginTop:"12px",background:CA,border:"1px solid "+BD,borderRadius:"14px",padding:"20px 22px",display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap",borderLeft:"4px solid "+OR}}>
+    <div style={{marginTop:"12px",background:CA,border:"1px solid "+BD,borderLeft:"4px solid "+OR,borderRadius:"14px",padding:"20px 22px",display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap"}}>
       <div style={{fontSize:"1.8rem",flexShrink:0}}>📋</div>
       <div style={{flex:1,minWidth:"200px"}}>
         <div style={{fontSize:"0.65rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#8a7560",marginBottom:"5px"}}>One last pass</div>
@@ -250,47 +248,27 @@ function ChecklistBridge(){
   );
 }
 
-// ── Selected-style chip ───────────────────────────────────────
-function StyleChip({style,onClear}){
-  if(!style) return(
-    <div style={{display:"flex",alignItems:"center",gap:"8px",background:"#f0e8da",border:"1px dashed #d9c9b2",borderRadius:"999px",padding:"6px 14px",marginBottom:"14px",fontSize:"0.72rem",color:"#8a7560"}}>
-      <span>🎚️</span> No trading style selected yet. Pick one in <strong style={{color:DK}}>Build the Trade</strong> and this module adjusts to it.
-    </div>
-  );
-  return(
-    <div style={{display:"flex",alignItems:"center",gap:"10px",background:style.color+"12",border:"1px solid "+style.color+"55",borderRadius:"999px",padding:"6px 8px 6px 14px",marginBottom:"14px",width:"fit-content"}}>
-      <span style={{fontSize:"0.72rem",color:"#8a7560",fontWeight:"600"}}>Planning as</span>
-      <span style={{fontSize:"0.78rem",fontWeight:"700",color:style.color}}>{style.label}</span>
-      <button onClick={onClear} style={{background:"none",border:"none",cursor:"pointer",color:"#8a7560",fontSize:"0.85rem",lineHeight:"1",padding:"3px 7px",borderRadius:"999px"}}>✕</button>
-    </div>
-  );
-}
-
 // ═══════════════════════════════════════════════════════════════
-// PART 1 — BEFORE THE TRADE
+// TAB 1 — BEFORE THE TRADE
 // ═══════════════════════════════════════════════════════════════
-function PartBefore({style,onNext}){
+function TabBefore({style,onNext}){
   const fast = style && (style.id==="scalp" || style.id==="daytrade");
   const vixBody = style
     ? (fast
         ? "Scalps and day trades need tighter conditions because you have no time to be wrong. Above 22–23 VIX, Dominique either steps aside or cuts size hard. The noise takes you out before the thesis has a chance to play out."
         : "Below 20 is Dominique's comfortable zone. She starts trimming size when VIX pushes above 25, and above 30 she's mostly in cash or sticking to defined-risk setups only. Elevated VIX means wider swings and pricier premium — not the environment to be a hero.")
-    : "Below 20 is Dominique's comfortable zone. She trims size above 25, and above 30 she's mostly in cash or defined-risk setups only. Fast styles need tighter conditions than that: above 22–23 VIX on a scalp or day trade, step aside or cut size hard.";
+    : "Below 20 is Dominique's comfortable zone. She trims size above 25, and above 30 she's mostly in cash or defined-risk setups only. Faster styles need tighter conditions than that: above 22–23 VIX on a scalp or day trade, step aside or cut size hard.";
 
   return(
     <div className="fu">
-      <DarkCallout eyebrow="☀️ Before you look at a single chart">
-        Preparation is where the trade is won or lost. Dominique checks market context <strong style={{color:"#fff"}}>before</strong> opening any chart. If the context isn't right, there is no trade — regardless of what the chart looks like.
-      </DarkCallout>
-
       <QDA
         question="Does today's market support trading?"
         options={["Trade","Wait"]}
-        action="If the context is clean, continue to Build the Trade. If it isn't, walk away and keep your capital. There is always another day."
+        action="If the context is clean, continue to the setup. If it isn't, walk away and keep your capital. Preparation is where the trade is won or lost, and there is always another day."
         color={PU}
       />
 
-      <SectionLabel label="Morning Sequence — In Order" sub="Complete these before evaluating any stock." />
+      <SectionLabel label="Morning Sequence — In Order" sub="Complete these before evaluating any stock." color={PU}/>
 
       <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",overflow:"hidden",marginBottom:"16px"}}>
         {[
@@ -309,7 +287,7 @@ function PartBefore({style,onNext}){
         ))}
       </div>
 
-      <SectionLabel label="Watchlist Criteria" sub="What earns a stock a spot on the list." />
+      <SectionLabel label="Watchlist Criteria" sub="What earns a stock a spot on the list." color={PU}/>
       <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"16px"}}>
         <InfoCard icon="📈" title="A name you know cold" color={GR}>Dominique keeps 15–20 tickers she deeply knows — their personalities, their levels, how they move. A focused watchlist is a feature, not a limitation.</InfoCard>
         <InfoCard icon="💧" title="High liquidity" color={BL}>Minimum 1 million average daily shares traded. Low volume means wide spreads and difficult exits.</InfoCard>
@@ -327,15 +305,14 @@ function PartBefore({style,onNext}){
         {icon:"📝",label:"Trade Planner — Step One",url:LINK.planner1},
       ]}/>
 
-      <NextBtn label="Next: Build the Trade" onClick={onNext}/>
+      <NextBtn label="Next: Validate the Setup" onClick={onNext}/>
     </div>
   );
 }
 
 // ═══════════════════════════════════════════════════════════════
-// PART 2 — BUILD THE TRADE
+// TAB 2 — VALIDATE THE SETUP
 // ═══════════════════════════════════════════════════════════════
-
 const UNIVERSAL_GREEN = [
   "Price is at a level that matters — a well-tested support or resistance",
   "Your timeframes agree: the higher chart sets the bias, the lower one times the entry",
@@ -351,92 +328,213 @@ const UNIVERSAL_RED = [
   "You're guessing the turn instead of waiting for the close",
 ];
 
-function ChartStackPrinciple(){
+function TabValidate({onNext}){
   return(
-    <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px",marginBottom:"14px"}} className="g2">
-      {[
-        {n:"1",color:PU,title:"Higher timeframe",desc:"Sets the bias. This chart is the boss. Never let the fastest chart talk you out of what the slowest one is telling you."},
-        {n:"2",color:OR,title:"Middle timeframe",desc:"Shows the structure and the entry zone. Is price actually arriving at a level, or floating between them?"},
-        {n:"3",color:GR,title:"Lower timeframe",desc:"Times the trigger only. It never overrules the bias — it just tells you when to act on it."},
-      ].map(s=>(
-        <div key={s.n} style={{background:CA,border:"1px solid "+BD,borderRadius:"10px",padding:"14px",borderTop:"3px solid "+s.color}}>
-          <div style={{width:"24px",height:"24px",borderRadius:"50%",background:s.color,color:"#fff",fontWeight:"700",fontSize:"0.78rem",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:"8px"}}>{s.n}</div>
-          <div style={{fontWeight:"700",fontSize:"0.82rem",color:DK,marginBottom:"4px"}}>{s.title}</div>
-          <div style={{fontSize:"0.72rem",color:"#5a4535",lineHeight:"1.5"}}>{s.desc}</div>
+    <div className="fu">
+      <QDA
+        question="Is the setup valid?"
+        options={["Yes","No"]}
+        action="If it's valid, continue and choose the style that fits it. If it isn't, wait. A setup you have to argue for is a setup you don't have."
+        color={GR}
+      />
+
+      <SectionLabel label="Green Flags and Red Flags" sub="What confirms the setup, and what kills it." color={GR}/>
+      <GreenRed green={UNIVERSAL_GREEN} red={UNIVERSAL_RED}/>
+
+      <div style={{marginTop:"20px"}}>
+        <SectionLabel label="The Chart Stack — Three Timeframes, Three Jobs" sub="The exact charts depend on the style you choose next. The roles never change." color={GR}/>
+        <div className="g2" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px",marginBottom:"16px"}}>
+          {[
+            {n:"1",color:PU,title:"Higher timeframe",desc:"Sets the bias. This chart is the boss. Never let the fastest chart talk you out of what the slowest one is telling you."},
+            {n:"2",color:OR,title:"Middle timeframe",desc:"Shows the structure and the entry zone. Is price actually arriving at a level, or floating between them?"},
+            {n:"3",color:GR,title:"Lower timeframe",desc:"Times the trigger only. It never overrules the bias. It just tells you when to act on it."},
+          ].map(s=>(
+            <div key={s.n} style={{background:CA,border:"1px solid "+BD,borderRadius:"10px",padding:"14px",borderTop:"3px solid "+s.color}}>
+              <div style={{width:"24px",height:"24px",borderRadius:"50%",background:s.color,color:"#fff",fontWeight:"700",fontSize:"0.78rem",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:"8px"}}>{s.n}</div>
+              <div style={{fontWeight:"700",fontSize:"0.82rem",color:DK,marginBottom:"4px"}}>{s.title}</div>
+              <div style={{fontSize:"0.72rem",color:"#5a4535",lineHeight:"1.5"}}>{s.desc}</div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
+
+      <SectionLabel label="Entry Timeframe — What Counts as a Level" sub="If you can't name the level, you don't have an entry." color={GR}/>
+      <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"16px"}}>
+        <InfoCard icon="📍" title="A well-tested level" color={GR}>Support or resistance that price has respected more than once. One touch is a coincidence. Several touches make it a level other traders are watching too.</InfoCard>
+        <InfoCard icon="📊" title="VWAP and session levels" color={BL}>For intraday work, VWAP and the session high or low are the levels that matter. That's where the volume actually sits.</InfoCard>
+        <InfoCard icon="🌫️" title="No-man's-land" color={RD}>Price floating between levels with nothing nearby above or below. There's no reference point, so there's nothing to be right or wrong against. No level means no trade.</InfoCard>
+        <InfoCard icon="🕯️" title="Confirmation" color={GD}>Confirmation means the candle closed. Not "it looks like it's holding." Not "it's about to break." Closed. Everything before the close is a rumor, and rumors reverse.</InfoCard>
+      </div>
+
+      <RuleBox rule="If you can't point to the level on the chart and say why price should react there, you don't have a setup. You have a hope. Wait for price to come to a level that matters." color={GR}/>
+
+      <Resources items={[{icon:"📊",label:"Technical Analysis",url:LINK.ta}]}/>
+
+      <NextBtn label="Next: Choose the Style" onClick={onNext}/>
     </div>
   );
 }
 
-function ChartStack({style,open,toggle}){
+// ═══════════════════════════════════════════════════════════════
+// TAB 3 — CHOOSE THE STYLE
+// ═══════════════════════════════════════════════════════════════
+function ChartStackStatic({style}){
   return(
     <div>
-      <div style={{background:"#fff4eb",border:"1px solid #fad0a8",borderRadius:"10px",padding:"11px 14px",marginBottom:"12px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
-        <span style={{fontSize:"0.9rem",flexShrink:0}}>💡</span>
-        <div style={{fontSize:"0.77rem",color:"#5a4535",lineHeight:"1.55"}}>Work through these in order. If any timeframe fails the check, stop there. No timeframe alignment means no trade.</div>
-      </div>
-      {style.charts.map((tf,idx)=>{
-        const isOpen=open===tf.tf;
-        return(
-          <div key={tf.tf} style={{marginBottom:"8px"}}>
-            <div onClick={()=>toggle(tf.tf)} style={{display:"flex",alignItems:"center",gap:"12px",padding:"13px 16px",cursor:"pointer",background:isOpen?"#fffcf7":CA,border:"1px solid "+(isOpen?tf.color:BD),borderRadius:isOpen?"12px 12px 0 0":"12px",borderLeft:"4px solid "+tf.color,transition:"all 0.15s"}}>
-              <div style={{width:"26px",height:"26px",borderRadius:"50%",background:tf.color,color:"#fff",fontWeight:"700",fontSize:"0.75rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{idx+1}</div>
-              <div style={{flex:1}}>
-                <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap",marginBottom:"2px"}}>
-                  <span style={{fontWeight:"700",fontSize:"0.88rem",color:DK}}>{tf.tf} Chart</span>
-                  <span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:tf.color+"18",color:tf.color,fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase"}}>{tf.role}</span>
-                </div>
-                <div style={{fontSize:"0.73rem",color:"#8a7560",fontStyle:"italic"}}>"{tf.q}"</div>
+      {style.charts.map((tf,idx)=>(
+        <div key={tf.tf} style={{background:CA,border:"1px solid "+BD,borderLeft:"4px solid "+tf.color,borderRadius:"12px",padding:"14px 16px",marginBottom:"8px"}}>
+          <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"10px"}}>
+            <div style={{width:"26px",height:"26px",borderRadius:"50%",background:tf.color,color:"#fff",fontWeight:"700",fontSize:"0.75rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{idx+1}</div>
+            <div style={{flex:1}}>
+              <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap",marginBottom:"2px"}}>
+                <span style={{fontWeight:"700",fontSize:"0.88rem",color:DK}}>{tf.tf} Chart</span>
+                <span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:tf.color+"18",color:tf.color,fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase"}}>{tf.role}</span>
               </div>
-              <span style={{color:"#8a7560",fontSize:"13px",flexShrink:0,transition:"transform 0.2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)"}}>▼</span>
+              <div style={{fontSize:"0.73rem",color:"#8a7560",fontStyle:"italic"}}>"{tf.q}"</div>
             </div>
-            {isOpen&&(
-              <div className="fu" style={{border:"1px solid "+tf.color,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"14px 16px",background:CA}}>
-                <div style={{fontSize:"0.7rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:"#8a7560",marginBottom:"10px"}}>✓ Pass if all three are true</div>
-                {tf.checks.map((c,i)=>(
-                  <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start",marginBottom:"8px",padding:"10px 12px",background:"#f7f0e6",borderRadius:"8px"}}>
-                    <div style={{width:"20px",height:"20px",borderRadius:"50%",border:"2px solid "+tf.color,flexShrink:0,marginTop:"1px"}}/>
-                    <div style={{fontSize:"0.8rem",color:"#3d2e1e",lineHeight:"1.55"}}>{c}</div>
-                  </div>
-                ))}
-                <RuleBox rule="If this timeframe fails, stop here. Do not proceed to the next chart looking for permission to trade." color={tf.color}/>
-              </div>
-            )}
           </div>
-        );
-      })}
+          {tf.checks.map((c,i)=>(
+            <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start",marginBottom:"6px",padding:"9px 12px",background:"#f7f0e6",borderRadius:"8px"}}>
+              <div style={{width:"18px",height:"18px",borderRadius:"50%",border:"2px solid "+tf.color,flexShrink:0,marginTop:"1px"}}/>
+              <div style={{fontSize:"0.79rem",color:"#3d2e1e",lineHeight:"1.55"}}>{c}</div>
+            </div>
+          ))}
+        </div>
+      ))}
+      <RuleBox rule="Work the charts in order. If a timeframe fails, stop there. Do not move to the next chart looking for permission to trade." color={style.color}/>
     </div>
   );
 }
 
-function StylePicker({styleId,onSelect}){
+function StyleCard({st,isOpen,onToggle}){
   return(
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"14px"}} className="g2">
-      {STYLE_ORDER.map(id=>{
-        const st=STYLES[id];
-        const active = styleId===id;
-        return(
-          <button key={id} onClick={()=>onSelect(id)} style={{background:active?st.color+"0f":CA,border:"2px solid "+(active?st.color:BD),borderRadius:"14px",padding:"16px 14px",cursor:"pointer",transition:"all 0.18s",textAlign:"left"}}
-            onMouseOver={e=>{if(!active){e.currentTarget.style.borderColor=st.color;e.currentTarget.style.background=st.color+"0c";}}}
-            onMouseOut={e=>{if(!active){e.currentTarget.style.borderColor=BD;e.currentTarget.style.background=CA;}}}>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"4px"}}>
-              <span style={{fontFamily:"Georgia,serif",fontSize:"1.1rem",fontWeight:"700",color:DK}}>{st.label}</span>
-              {active&&<span style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:st.color}}>Selected</span>}
+    <div style={{marginBottom:"8px"}}>
+      <div onClick={onToggle} style={{display:"flex",alignItems:"center",gap:"12px",padding:"15px 16px",cursor:"pointer",background:isOpen?"#fffcf7":CA,border:"1px solid "+(isOpen?st.color:BD),borderRadius:isOpen?"12px 12px 0 0":"12px",borderLeft:"4px solid "+st.color,transition:"all 0.15s"}}>
+        <div style={{flex:1}}>
+          <div style={{display:"flex",alignItems:"center",gap:"9px",flexWrap:"wrap",marginBottom:"3px"}}>
+            <span style={{fontFamily:"Georgia,serif",fontSize:"1.05rem",fontWeight:"700",color:DK}}>{st.label}</span>
+            <span style={{display:"inline-block",padding:"2px 9px",borderRadius:"999px",background:st.color+"18",color:st.color,fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase"}}>{st.desc}</span>
+            {isOpen&&<span style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:st.color}}>· Selected</span>}
+          </div>
+          <div style={{fontSize:"0.76rem",color:"#8a7560",lineHeight:"1.5"}}>{st.shortDef}</div>
+        </div>
+        <span style={{color:"#8a7560",fontSize:"13px",flexShrink:0,transition:"transform 0.2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)"}}>▼</span>
+      </div>
+
+      {isOpen&&(
+        <div className="fu" style={{border:"1px solid "+st.color,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"16px",background:CA}}>
+          <div style={{fontSize:"0.85rem",color:"#3d2e1e",lineHeight:"1.7",marginBottom:"14px"}}>{st.definition}</div>
+
+          <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"12px"}}>
+            {[
+              {icon:"🎯",label:"When to use it",body:st.conditions,color:st.color},
+              {icon:"📡",label:"Entry signal",body:st.signal,color:st.color},
+              {icon:"⏱️",label:"Hold time",body:st.hold,color:GD},
+              {icon:"💼",label:"Position size",body:st.chain.premium,color:GR},
+            ].map(item=>(
+              <div key={item.label} style={{background:"#f7f0e6",borderRadius:"10px",padding:"12px 14px",borderLeft:"3px solid "+item.color}}>
+                <div style={{display:"flex",alignItems:"center",gap:"6px",marginBottom:"6px"}}>
+                  <span style={{fontSize:"1rem"}}>{item.icon}</span>
+                  <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:item.color}}>{item.label}</div>
+                </div>
+                <div style={{fontSize:"0.78rem",color:"#3d2e1e",lineHeight:"1.55"}}>{item.body}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"12px"}}>
+            <div style={{background:"#e8faf3",borderRadius:"10px",padding:"13px 15px",borderLeft:"4px solid "+GR}}>
+              <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:GR,marginBottom:"7px"}}>🎯 Profit Target</div>
+              <div style={{fontSize:"0.83rem",color:"#052e16",lineHeight:"1.6",fontWeight:"700"}}>{st.target}</div>
             </div>
-            <div style={{fontSize:"0.66rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:st.color,marginBottom:"8px"}}>{st.desc}</div>
-            <div style={{display:"grid",gap:"4px"}}>
-              <div style={{fontSize:"0.72rem",color:"#5a4535"}}><strong style={{color:"#8a7560"}}>Hold:</strong> {st.hold.split(".")[0]}</div>
-              <div style={{fontSize:"0.72rem",color:"#5a4535"}}><strong style={{color:"#8a7560"}}>Charts:</strong> {st.stack}</div>
-              <div style={{fontSize:"0.72rem",color:"#5a4535"}}><strong style={{color:"#8a7560"}}>Contract:</strong> {st.contractShort}</div>
+            <div style={{background:"#fff0ee",borderRadius:"10px",padding:"13px 15px",borderLeft:"4px solid "+RD}}>
+              <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:RD,marginBottom:"7px"}}>⛔ Trade Invalidation</div>
+              <div style={{fontSize:"0.83rem",color:"#5a1a1a",lineHeight:"1.6",fontWeight:"700"}}>{st.invalid}</div>
             </div>
-          </button>
-        );
-      })}
+          </div>
+
+          <GreenRed green={st.green} red={st.red} greenLabel={"Green flags — "+st.label} redLabel={"Red flags — "+st.label}/>
+
+          <div style={{marginTop:"18px"}}>
+            <SectionLabel label={"📈 Chart Stack — "+st.stack} sub="Work through them in order. All must pass." color={st.color}/>
+            <ChartStackStatic style={st}/>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
+function ComparisonTable(){
+  return(
+    <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",overflow:"hidden",marginTop:"16px"}}>
+      <div style={{background:"#f0e8da",padding:"12px 16px",borderBottom:"1px solid "+BD}}>
+        <div style={{fontWeight:"700",fontSize:"0.82rem",color:DK}}>📋 All Styles — Quick Comparison</div>
+        <div style={{fontSize:"0.72rem",color:"#8a7560",marginTop:"2px"}}>See how the requirements differ across all four styles</div>
+      </div>
+      <div style={{overflowX:"auto"}}>
+        <table style={{width:"100%",borderCollapse:"collapse",minWidth:"560px"}}>
+          <thead>
+            <tr style={{background:"#f7f0e6"}}>
+              {["Criterion","Scalp","Day Trade","Swing","LEAP"].map(h=>(<th key={h} style={{padding:"9px 14px",fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:"#8a7560",textAlign:"left"}}>{h}</th>))}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ["Hold time","Minutes–1 hour","Minutes–hours","Days–weeks","A year or more"],
+              ["Chart stack","15m → 5m → 1m","15m → 5m → 1m","Daily → 4H → 1H","Monthly → Weekly"],
+              ["DTE","7–14 days","7–14 days","30–60 days","12+ months"],
+              ["Delta","0.60–0.70","0.60–0.70","0.40–0.60","0.70–0.80"],
+              ["Theta","Barely matters","Minor factor","≤ 50% of Delta","Low by design"],
+              ["Risk per trade","≤ 3%","≤ 3%","3–5%","3–5%"],
+              ["Profit target","20–30%","20–30%","2R, scale out","Reassess at +50–100%"],
+              ["Trade invalidation","15–20%","15–20%","1R / broken level","Broken weekly/monthly trend"],
+            ].map((row,i)=>(
+              <tr key={i} style={{borderBottom:"1px solid "+BD,background:i%2===0?"transparent":"#faf5ee"}}>
+                <td style={{padding:"10px 14px",fontWeight:"700",fontSize:"0.82rem",color:DK}}>{row[0]}</td>
+                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:SC+"18",color:SC,fontSize:"0.72rem",fontWeight:"700"}}>{row[1]}</span></td>
+                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:RD+"18",color:RD,fontSize:"0.72rem",fontWeight:"700"}}>{row[2]}</span></td>
+                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:OR+"18",color:OR,fontSize:"0.72rem",fontWeight:"700"}}>{row[3]}</span></td>
+                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:PU+"18",color:PU,fontSize:"0.72rem",fontWeight:"700"}}>{row[4]}</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+function TabStyle({style,styleId,onSelect,onNext}){
+  return(
+    <div className="fu">
+      <QDA
+        question="How long should this trade reasonably take to reach my target?"
+        options={["Minutes","Hours","Weeks","Months"]}
+        action="Open the style that matches your honest answer. You're not choosing an identity or becoming a swing trader. You're estimating how long this one idea needs to work, and that estimate decides the contract you buy."
+        color={OR}
+      />
+
+      <SectionLabel label="Four Styles" sub="Open one to see how it works. The style you open is the one the next two tabs use." color={OR}/>
+
+      {STYLE_ORDER.map(id=>(
+        <StyleCard key={id} st={STYLES[id]} isOpen={styleId===id} onToggle={()=>onSelect(id)}/>
+      ))}
+
+      <ComparisonTable/>
+
+      {style
+        ? <NextBtn label="Next: Build the Contract" onClick={onNext}/>
+        : <div style={{marginTop:"20px",textAlign:"center",background:"#f0e8da",border:"1px dashed #d9c9b2",borderRadius:"12px",padding:"16px",fontSize:"0.8rem",color:"#8a7560"}}>
+            Open a style above to continue. The contract criteria and the entry checks are set by the style you choose.
+          </div>}
+    </div>
+  );
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TAB 4 — BUILD THE CONTRACT
+// ═══════════════════════════════════════════════════════════════
 function ChainCriteria({style,open,toggle}){
   return(
     <div>
@@ -494,172 +592,29 @@ function ChainCriteria({style,open,toggle}){
   );
 }
 
-function ComparisonTable(){
-  return(
-    <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",overflow:"hidden",marginTop:"16px"}}>
-      <div style={{background:"#f0e8da",padding:"12px 16px",borderBottom:"1px solid "+BD}}>
-        <div style={{fontWeight:"700",fontSize:"0.82rem",color:DK}}>📋 All Styles — Quick Comparison</div>
-        <div style={{fontSize:"0.72rem",color:"#8a7560",marginTop:"2px"}}>See how the requirements differ across all four styles</div>
-      </div>
-      <div style={{overflowX:"auto"}}>
-        <table style={{width:"100%",borderCollapse:"collapse",minWidth:"560px"}}>
-          <thead>
-            <tr style={{background:"#f7f0e6"}}>
-              {["Criterion","Scalp","Day Trade","Swing","LEAP"].map(h=>(<th key={h} style={{padding:"9px 14px",fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:"#8a7560",textAlign:"left"}}>{h}</th>))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ["Hold time","Minutes–1 hour","Minutes–hours","Days–weeks","A year or more"],
-              ["Chart stack","15m → 5m → 1m","15m → 5m → 1m","Daily → 4H → 1H","Monthly → Weekly"],
-              ["DTE","7–14 days","7–14 days","30–60 days","12+ months"],
-              ["Delta","0.60–0.70","0.60–0.70","0.40–0.60","0.70–0.80"],
-              ["Risk per trade","≤ 3%","≤ 3%","3–5%","3–5%"],
-              ["Profit target","20–30%","20–30%","2R, scale out","Reassess at +50–100%"],
-              ["Trade invalidation","15–20%","15–20%","1R / broken level","Broken weekly/monthly trend"],
-            ].map((row,i)=>(
-              <tr key={i} style={{borderBottom:"1px solid "+BD,background:i%2===0?"transparent":"#faf5ee"}}>
-                <td style={{padding:"10px 14px",fontWeight:"700",fontSize:"0.82rem",color:DK}}>{row[0]}</td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:SC+"18",color:SC,fontSize:"0.72rem",fontWeight:"700"}}>{row[1]}</span></td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:RD+"18",color:RD,fontSize:"0.72rem",fontWeight:"700"}}>{row[2]}</span></td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:OR+"18",color:OR,fontSize:"0.72rem",fontWeight:"700"}}>{row[3]}</span></td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:PU+"18",color:PU,fontSize:"0.72rem",fontWeight:"700"}}>{row[4]}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function PartBuild({style,styleId,onSelect,onNext}){
-  const[openChart,setOpenChart]=useState(null);
-  const[openChain,setOpenChain]=useState(null);
-  const toggleChart=id=>setOpenChart(p=>p===id?null:id);
-  const toggleChain=id=>setOpenChain(p=>p===id?null:id);
+function TabContract({style,onNext}){
+  const[open,setOpen]=useState(null);
+  const toggle=id=>setOpen(p=>p===id?null:id);
   const accent = style?style.color:OR;
 
   return(
     <div className="fu">
-      <DarkCallout eyebrow="🧱 The heart of the module">
-        You have an idea and the market supports trading today. Now you decide whether this specific opportunity <strong style={{color:"#fff"}}>deserves your money</strong>. Three steps: validate the setup, choose the style, then build the contract around it.
-      </DarkCallout>
-
-      {/* ── SECTION A ── */}
-      <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"22px 0 12px"}}>
-        <div style={{width:"28px",height:"28px",borderRadius:"8px",background:GR,color:"#fff",fontWeight:"700",fontSize:"0.8rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>A</div>
-        <div style={{fontFamily:"Georgia,serif",fontSize:"1.25rem",color:DK}}>Validate the setup</div>
-      </div>
-
-      <QDA
-        question="Is the setup valid?"
-        options={["Yes","No"]}
-        action="If it's valid, continue and choose your style. If it isn't, wait. A setup you have to argue for is a setup you don't have."
-        color={GR}
-      />
-
-      <SectionLabel label="Green Flags and Red Flags" sub="What confirms the setup, and what kills it." color={GR}/>
-      <GreenRed green={UNIVERSAL_GREEN} red={UNIVERSAL_RED}/>
-
-      <div style={{marginTop:"20px"}}>
-        <SectionLabel label="The Chart Stack" sub="Three timeframes, three jobs. The exact charts depend on the style you choose next." color={GR}/>
-        <ChartStackPrinciple/>
-        <div style={{background:"#f7f0e6",borderRadius:"10px",padding:"12px 14px",marginBottom:"6px"}}>
-          <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.12em",textTransform:"uppercase",color:"#8a7560",marginBottom:"6px"}}>🕯️ Confirmation</div>
-          <div style={{fontSize:"0.79rem",color:"#3d2e1e",lineHeight:"1.65"}}>Confirmation means the candle closed. Not "it looks like it's holding." Not "it's about to break." Closed. Everything before the close is a rumor, and rumors reverse.</div>
-        </div>
-      </div>
-
-      <Resources items={[{icon:"📊",label:"Technical Analysis",url:LINK.ta}]}/>
-
-      {/* ── SECTION B ── */}
-      <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"28px 0 12px"}}>
-        <div style={{width:"28px",height:"28px",borderRadius:"8px",background:OR,color:"#fff",fontWeight:"700",fontSize:"0.8rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>B</div>
-        <div style={{fontFamily:"Georgia,serif",fontSize:"1.25rem",color:DK}}>Choose the style</div>
-      </div>
-
-      <QDA
-        question="How long should this trade reasonably take to reach my target?"
-        options={["Minutes","Hours","Weeks","Months"]}
-        action="Pick the style that matches your honest answer, then build the contract around it."
-        color={OR}
-      />
-
-      <div style={{background:"#fff4eb",border:"1px solid #fad0a8",borderRadius:"10px",padding:"11px 14px",marginBottom:"14px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
-        <span style={{fontSize:"0.9rem",flexShrink:0}}>💡</span>
-        <div style={{fontSize:"0.77rem",color:"#5a4535",lineHeight:"1.55"}}>You're not choosing an identity here. You're not "becoming a swing trader." You're estimating how long this particular idea needs to work, and the estimate decides the contract you buy.</div>
-      </div>
-
-      <StylePicker styleId={styleId} onSelect={onSelect}/>
-
-      {style&&(
-        <div className="fu" key={style.id} style={{background:CA,border:"2px solid "+style.color,borderRadius:"14px",padding:"18px 20px",marginBottom:"14px"}}>
-          <div style={{fontFamily:"Georgia,serif",fontSize:"1.15rem",fontWeight:"700",color:DK,marginBottom:"2px"}}>{style.label}</div>
-          <div style={{fontSize:"0.7rem",color:style.color,fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",marginBottom:"12px"}}>{style.desc}</div>
-          <div style={{fontSize:"0.85rem",color:"#3d2e1e",lineHeight:"1.7",marginBottom:"14px"}}>{style.definition}</div>
-
-          <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"14px"}}>
-            {[
-              {icon:"🎯",label:"When to use it",body:style.conditions,color:style.color},
-              {icon:"📡",label:"Entry signal",body:style.signal,color:style.color},
-              {icon:"⏱️",label:"Hold time",body:style.hold,color:GD},
-              {icon:"💼",label:"Position size",body:style.chain.premium,color:GR},
-            ].map(item=>(
-              <div key={item.label} style={{background:"#f7f0e6",borderRadius:"10px",padding:"12px 14px",borderLeft:"3px solid "+item.color}}>
-                <div style={{display:"flex",alignItems:"center",gap:"6px",marginBottom:"6px"}}>
-                  <span style={{fontSize:"1rem"}}>{item.icon}</span>
-                  <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:item.color}}>{item.label}</div>
-                </div>
-                <div style={{fontSize:"0.78rem",color:"#3d2e1e",lineHeight:"1.55"}}>{item.body}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"14px"}}>
-            <div style={{background:"#e8faf3",borderRadius:"10px",padding:"14px 16px",borderLeft:"4px solid "+GR}}>
-              <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:GR,marginBottom:"8px"}}>🎯 Profit Target</div>
-              <div style={{fontSize:"0.85rem",color:"#052e16",lineHeight:"1.6",fontWeight:"700"}}>{style.target}</div>
-            </div>
-            <div style={{background:"#fff0ee",borderRadius:"10px",padding:"14px 16px",borderLeft:"4px solid "+RD}}>
-              <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:RD,marginBottom:"8px"}}>⛔ Trade Invalidation</div>
-              <div style={{fontSize:"0.85rem",color:"#5a1a1a",lineHeight:"1.6",fontWeight:"700"}}>{style.invalid}</div>
-            </div>
-          </div>
-
-          <GreenRed green={style.green} red={style.red} greenLabel={"Green flags — "+style.label} redLabel={"Red flags — "+style.label}/>
-
-          <div style={{marginTop:"18px"}}>
-            <SectionLabel label={"📈 Chart Stack — "+style.label} sub={style.stack} color={style.color}/>
-            <ChartStack style={style} open={openChart} toggle={toggleChart}/>
-          </div>
-        </div>
-      )}
-
-      <ComparisonTable/>
-
-      {/* ── SECTION C ── */}
-      <div style={{display:"flex",alignItems:"center",gap:"10px",margin:"28px 0 12px"}}>
-        <div style={{width:"28px",height:"28px",borderRadius:"8px",background:BL,color:"#fff",fontWeight:"700",fontSize:"0.8rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>C</div>
-        <div style={{fontFamily:"Georgia,serif",fontSize:"1.25rem",color:DK}}>Build the contract</div>
-      </div>
-
       <QDA
         question="Does this contract support my thesis?"
         options={["Yes","No"]}
-        action="If every criterion passes, the contract is built. If one fails, adjust the contract — a different strike, a different expiration, fewer contracts. Don't adjust the thesis to fit the contract."
-        color={BL}
+        action="If every criterion passes, the contract is built. If one fails, adjust the contract — a different strike, a different expiration, fewer contracts. Never adjust the thesis to fit the contract."
+        color={accent}
       />
 
       <div style={{background:"#fff4eb",border:"1px solid #fad0a8",borderRadius:"10px",padding:"11px 14px",marginBottom:"16px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
         <span style={{fontSize:"0.9rem",flexShrink:0}}>💡</span>
-        <div style={{fontSize:"0.77rem",color:"#5a4535",lineHeight:"1.55"}}>The Options Chain module explains what each of these terms means. This section gives you <strong>Dominique's specific requirements</strong> for each one. {style?"The values below are set for "+style.label+".":"Choose a style above and these values set themselves."}</div>
+        <div style={{fontSize:"0.77rem",color:"#5a4535",lineHeight:"1.55"}}>The Options Chain module explains what each of these terms means. This tab gives you <strong>Dominique's specific requirements</strong> for each one. {style?"The values below are set for "+style.label+".":"Choose a style on the previous tab and these values set themselves."}</div>
       </div>
 
       <SectionLabel label="Contract Criteria — All Must Pass" sub={style?"Set for "+style.label+". Tap each to see why it matters.":"Tap each to compare across all four styles."} color={accent}/>
-      <ChainCriteria style={style} open={openChain} toggle={toggleChain}/>
+      <ChainCriteria style={style} open={open} toggle={toggle}/>
 
-      {style&&<RuleBox rule={"Final contract check for a "+style.label.toLowerCase()+": "+style.chain.delta+" Delta · "+style.chain.dte+" · Theta "+style.chain.theta.split("—")[0].trim()+" · OI "+style.chain.oi+" · "+style.chain.premium+". If one criterion fails, there is no trade, regardless of how good the chart looks."} color={style.color}/>}
+      {style&&<RuleBox rule={"Final contract check for a "+style.label.toLowerCase()+": "+style.chain.delta+" Delta · "+style.chain.dte+" · OI "+style.chain.oi+" · "+style.chain.premium+". If one criterion fails, there is no trade, regardless of how good the chart looks."} color={style.color}/>}
 
       <DomQ>Does this contract give my thesis enough time to work?</DomQ>
 
@@ -675,18 +630,14 @@ function PartBuild({style,styleId,onSelect,onNext}){
 }
 
 // ═══════════════════════════════════════════════════════════════
-// PART 3 — EXECUTE THE TRADE
+// TAB 5 — EXECUTE THE TRADE
 // ═══════════════════════════════════════════════════════════════
-function PartExecute({style}){
+function TabExecute({style}){
   const candleTf = style ? style.candle : "confirmation";
   const accent = style?style.color:OR;
 
   return(
     <div className="fu">
-      <DarkCallout eyebrow="🚀 The last checks before the order">
-        The context is clean, the setup is valid, the style is chosen, and the contract is built. Now the only question left is whether the <strong style={{color:"#fff"}}>plan</strong> is complete. Every box below must be checked before the order goes in.
-      </DarkCallout>
-
       <QDA
         question="Is my plan complete?"
         options={["Enter","Wait"]}
@@ -706,7 +657,7 @@ function PartExecute({style}){
             title:"Have I run every contract criterion?",
             body:style
               ? "Final check: "+style.chain.delta+" Delta · "+style.chain.dte+" · OI "+style.chain.oi+" · "+style.chain.premium+". If any one fails, do not enter — regardless of how good the chart looks."
-              : "Strike, Delta, DTE, Theta, open interest, volume, premium against account size. If any one fails, do not enter — regardless of how good the chart looks.",
+              : "Strike, Delta, DTE, Theta, open interest, volume, and premium against account size. If any one fails, do not enter — regardless of how good the chart looks.",
             rule:"The criteria are not optional. Running them every time is the difference between a process and a gamble."},
           {n:"3",color:PU,icon:"⛔",
             title:"Do I know my exit before I enter?",
@@ -757,11 +708,10 @@ function PartExecute({style}){
 
       <DomQ>If this trade moved against me immediately, would I still trust my plan?</DomQ>
 
-      {/* ── Completion panel ── */}
       <div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"14px",padding:"22px 24px",marginTop:"20px"}}>
         <div style={{fontSize:"0.65rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"8px"}}>🗺️ End of module</div>
         <div style={{fontFamily:"Georgia,serif",fontSize:"1.35rem",color:"#fff",marginBottom:"14px"}}>Your Trade Plan Is Complete</div>
-        <div style={{fontSize:"0.8rem",color:"#d4a87a",marginBottom:"14px"}}>You now have:</div>
+        <div style={{fontSize:"0.8rem",color:"#d4a87a",marginBottom:"12px"}}>You now have:</div>
         {[
           "A market thesis",
           "A validated setup",
@@ -771,7 +721,7 @@ function PartExecute({style}){
           "Defined profit target",
           "A completed Trade Planner",
         ].map((t,i)=>(
-          <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start",padding:"7px 0"}}>
+          <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start",padding:"6px 0"}}>
             <span style={{color:GR,fontSize:"0.85rem",flexShrink:0}}>✅</span>
             <span style={{fontSize:"0.85rem",color:"#e8ddd0",lineHeight:"1.5"}}>{t}</span>
           </div>
@@ -796,11 +746,25 @@ function PartExecute({style}){
   );
 }
 
+// ── Selected-style chip ───────────────────────────────────────
+function StyleChip({style,onClear}){
+  if(!style) return null;
+  return(
+    <div style={{display:"flex",alignItems:"center",gap:"9px",background:style.color+"12",border:"1px solid "+style.color+"55",borderRadius:"999px",padding:"5px 7px 5px 14px",marginBottom:"12px",width:"fit-content"}}>
+      <span style={{fontSize:"0.7rem",color:"#8a7560",fontWeight:"600"}}>Planning as</span>
+      <span style={{fontSize:"0.76rem",fontWeight:"700",color:style.color}}>{style.label}</span>
+      <button onClick={onClear} style={{background:"none",border:"none",cursor:"pointer",color:"#8a7560",fontSize:"0.8rem",lineHeight:"1",padding:"3px 6px"}}>✕</button>
+    </div>
+  );
+}
+
 // ── App ───────────────────────────────────────────────────────
 const TABS=[
-  {label:"Before the Trade", icon:"☀️"},
-  {label:"Build the Trade",  icon:"🧱"},
-  {label:"Execute",          icon:"🚀"},
+  {label:"Before",   icon:"☀️"},
+  {label:"Validate", icon:"📈"},
+  {label:"Style",    icon:"🎚️"},
+  {label:"Contract", icon:"⛓️"},
+  {label:"Execute",  icon:"🚀"},
 ];
 
 function App(){
@@ -813,7 +777,6 @@ function App(){
 
   return(
     <div>
-      {/* Topbar */}
       <div style={{background:DK,padding:"11px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <span style={{fontFamily:"Georgia,serif",fontStyle:"italic",fontSize:"1.2rem",color:"#fff"}}>demystified</span>
         <a href="https://options101-hub.vercel.app/"
@@ -827,16 +790,14 @@ function App(){
       </div>
 
       <div style={{maxWidth:"860px",margin:"0 auto",padding:"22px 16px 60px"}}>
-        {/* Header */}
-        <div style={{marginBottom:"16px"}}>
+        <div style={{marginBottom:"14px"}}>
           <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"6px"}}>Module 5</div>
           <h1 style={{fontFamily:"Georgia,serif",fontSize:"clamp(1.7rem,4vw,2.3rem)",color:DK,letterSpacing:"-0.03em",lineHeight:"1.15",marginBottom:"4px"}}>Trade Planning</h1>
-          <p style={{color:"#8a7560",fontSize:"0.85rem"}}>You have a trade idea. Now what?</p>
+          <p style={{color:"#8a7560",fontSize:"0.85rem"}}>From market open to order placed.</p>
         </div>
 
         <StyleChip style={style} onClear={()=>setStyleId(null)}/>
 
-        {/* Tabs */}
         <div style={{display:"flex",gap:"3px",background:"#e4d8c8",borderRadius:"12px",padding:"3px",marginBottom:"10px"}}>
           {TABS.map((t,i)=>(
             <button key={i} onClick={()=>goTab(i)} style={{
@@ -851,14 +812,15 @@ function App(){
           ))}
         </div>
 
-        {/* Progress */}
         <div style={{height:"3px",background:"#e4d8c8",borderRadius:"2px",marginBottom:"20px"}}>
           <div style={{height:"100%",width:((tab/(TABS.length-1))*100)+"%",background:style?style.color:OR,borderRadius:"2px",transition:"width 0.4s ease"}}/>
         </div>
 
-        {tab===0&&<PartBefore  style={style} onNext={()=>goTab(1)}/>}
-        {tab===1&&<PartBuild   style={style} styleId={styleId} onSelect={selectStyle} onNext={()=>goTab(2)}/>}
-        {tab===2&&<PartExecute style={style}/>}
+        {tab===0&&<TabBefore   style={style} onNext={()=>goTab(1)}/>}
+        {tab===1&&<TabValidate onNext={()=>goTab(2)}/>}
+        {tab===2&&<TabStyle    style={style} styleId={styleId} onSelect={selectStyle} onNext={()=>goTab(3)}/>}
+        {tab===3&&<TabContract style={style} onNext={()=>goTab(4)}/>}
+        {tab===4&&<TabExecute  style={style}/>}
       </div>
     </div>
   );
