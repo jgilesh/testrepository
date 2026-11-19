@@ -1,832 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Trade Planning — demystified</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Passive Income Calculator — demystified</title>
+<meta name="description" content="See the income your investments could pay, or how much you would need invested to reach an income goal.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
 <style>
-* { box-sizing:border-box; margin:0; padding:0; }
-body { background:#F5F0E8; font-family:system-ui,-apple-system,sans-serif; color:#1a1108; min-height:100vh; }
-@keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-@keyframes slideIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
-.fu { animation:fadeUp 0.3s ease forwards; }
-.si { animation:slideIn 0.25s ease forwards; }
-::-webkit-scrollbar{width:5px;height:5px}
-::-webkit-scrollbar-thumb{background:#C4A460;border-radius:3px}
-@media (max-width:620px){ .g2 { grid-template-columns:1fr !important; } }
+/* demystified · Option A ("the path") tool pages: shared shell (tokens, nav, hero, footer) */
+:root{--isa:#F9F6F1;--champ:#F4D7C3;--peach:#F9BC8A;--char:#3A3F4A;--ink:#2B2F38;--timb:#D6D1CB;--taupe:#88888B;--prin:#FF993F;--tang:#FF9B61;
+--bull:#2F8F5B;--bull-l:#3FA36C;--bull-t:#EAF4ED;--bear:#C2543F;--bear-l:#D0604A;--bear-t:#FAECE8;--prin-t:#FFF1E4;--prin-d:#B4631C;
+--disp:'Old Standard TT',Georgia,'Times New Roman',serif;--body:'Work Sans',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--isa);color:var(--char);font-family:var(--body);line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{color:inherit;font:inherit}
+svg.ic{width:1em;height:1em;flex:none;vertical-align:-.125em}
+.wrap{max-width:900px;margin:0 auto;padding:0 28px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:20;background:rgba(249,246,241,.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(58,63,74,.08)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.back{display:inline-flex;align-items:center;gap:10px;font-size:14px;font-weight:600;padding:9px 14px 9px 10px;border-radius:999px;background:#fff;border:1px solid var(--timb)}
+.back svg{transform:rotate(180deg)}
+.back:hover{border-color:var(--char)}
+.back:focus-visible,.brand:focus-visible{outline:2px solid var(--prin);outline-offset:2px}
+.brand{display:flex;align-items:center;gap:12px}.brand img{height:13px;width:auto}.brand b{font-family:var(--disp);font-weight:400;font-size:21px}
+
+/* hero */
+.mhero{padding:44px 0 8px}
+.mhero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+.crumb{display:inline-flex;align-items:center;gap:10px;font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--taupe)}
+.crumb .sw{width:12px;height:12px;border-radius:4px;background:var(--prin)}.crumb b{color:var(--char)}
+h1{font-family:var(--disp);font-weight:400;font-size:clamp(2.8rem,6.6vw,4.6rem);line-height:.96;letter-spacing:-1.5px;margin:16px 0 14px;text-wrap:balance}
+.anchor{font-family:var(--disp);font-style:italic;font-size:1.3rem;color:var(--taupe);max-width:34ch}
+.meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.meta span{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;background:#fff;border:1px solid var(--timb);padding:8px 13px;border-radius:999px}
+.meta svg{color:var(--prin)}
+.cover{aspect-ratio:4/3;max-width:100%;border-radius:28px;display:grid;place-items:center;padding:34px 30px 22px;position:relative;overflow:hidden}
+.cover.dark{background:var(--char);color:var(--isa)}
+.cover.light{background:var(--champ);color:var(--char)}
+.cover::before{content:"";position:absolute;width:70%;aspect-ratio:1;border-radius:50%;right:-14%;top:-22%}
+.cover.dark::before{background:var(--prin);opacity:.16}
+.cover.light::before{background:var(--peach)}
+.cover svg{position:relative;width:100%;height:100%}
+
+main{padding:40px 0 0}
+.stack{display:flex;flex-direction:column;gap:28px}
+.klabel{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--taupe);margin-bottom:14px}
+.klabel svg{color:var(--prin);font-size:15px}
+
+/* footer */
+footer{margin-top:80px;border-top:1px solid var(--timb)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;padding-top:26px;padding-bottom:40px;font-size:13px;color:var(--taupe)}
+footer .slog{font-family:var(--disp);font-style:italic;font-size:18px;color:var(--char)}
+footer .fd{display:inline-flex;gap:7px;margin-right:12px;vertical-align:middle}
+footer .fd i{width:7px;height:7px;border-radius:50%;background:var(--prin)}
+
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+@media (max-width:900px){
+  .mhero .wrap{grid-template-columns:1fr}.cover{order:-1;aspect-ratio:16/9}
+}
+@media (max-width:640px){
+  .wrap{padding:0 16px}.brand b{display:none}
+  .mhero{padding-top:24px}
+  .cover{border-radius:22px;padding:22px 18px 14px}
+  footer{margin-top:56px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ── tool kit: cards, fields, sliders, toggles, results (calculators, flashcards) ── */
+.tcard{position:relative;background:#fff;border-radius:22px;padding:24px 26px;min-width:0}
+.tcard.accent::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:22px 0 0 22px;background:var(--acc,var(--prin))}
+.tcard-h{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:var(--char)}
+.ico-t{width:36px;height:36px;border-radius:11px;background:var(--champ);color:var(--char);display:grid;place-items:center;font-size:17px;flex:none}
+.tgrid{display:grid;gap:14px;min-width:0}
+.tgrid.c2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.tgrid.form{gap:0 28px}
+.tgrid.tight{gap:12px}
+.field{margin-bottom:18px;min-width:0}
+.field.lg{margin-bottom:22px}
+.field-l{display:block;font-size:11.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--taupe);margin-bottom:8px}
+.field-h{display:block;text-transform:none;letter-spacing:0;font-weight:400;font-size:12.5px;color:#9C9894;margin-top:2px}
+.field-note{margin-top:7px;font-size:13px;font-weight:600}
+.inp{display:flex;align-items:stretch;border:1px solid var(--timb);border-radius:12px;overflow:hidden;background:#fff;transition:border-color .15s,box-shadow .15s}
+.inp:focus-within{border-color:var(--prin);box-shadow:0 0 0 3px rgba(255,153,63,.22)}
+.inp.on{border-color:var(--prin)}
+.inp>span{display:grid;place-items:center;padding:0 12px;background:var(--isa);color:var(--taupe);font-size:13.5px;font-weight:600;border-right:1px solid var(--timb);white-space:nowrap}
+.inp input{border:0;outline:0;background:transparent;padding:12px 14px;font:500 16px/1.2 var(--body);color:var(--char);width:100%;min-width:0;font-variant-numeric:tabular-nums}
+.inp input::placeholder{color:#B9B4AE}
+.inp.sm{width:140px;flex:none}.inp.sm input{padding:8px 10px;text-align:right;font-weight:600}
+.seg{display:flex;gap:4px;background:#EFEAE4;border-radius:999px;padding:4px}
+.seg button{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;background:none;border-radius:999px;padding:10px 14px;font:600 14px/1.15 var(--body);color:var(--taupe);cursor:pointer;text-align:center;transition:background .15s,color .15s}
+.seg button svg{font-size:17px}
+.seg button:hover{color:var(--char)}
+.seg button[aria-pressed="true"]{background:var(--char);color:var(--isa)}
+.seg button.on-bull[aria-pressed="true"]{background:var(--bull)}
+.seg button.on-bear[aria-pressed="true"]{background:var(--bear)}
+.seg button:focus-visible{outline:2px solid var(--prin);outline-offset:2px}
+.seg.big button{padding:13px 16px;font-size:15px}
+.seg.sm{max-width:340px}.seg.sm button{padding:8px 12px;font-size:13px}
+.slider{margin-bottom:18px}
+.slider-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.slider-top .field-l{margin:0}
+.slider-v{font-family:var(--disp);font-size:1.3rem;line-height:1;color:var(--char);font-variant-numeric:tabular-nums;white-space:nowrap}
+input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:6px;border-radius:6px;outline:none;cursor:pointer;margin:0;background:#E6E1DA}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:var(--thumb,var(--prin));border:3px solid #fff;box-shadow:0 1px 6px rgba(43,47,56,.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--thumb,var(--prin));border:3px solid #fff;box-shadow:0 1px 6px rgba(43,47,56,.35);cursor:pointer}
+input[type=range]:focus-visible{outline:2px solid var(--prin);outline-offset:6px}
+.kv-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #EFEAE4}
+.kv-row:last-of-type{border-bottom:0}
+.kv-k{font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--taupe)}
+.kv-v{font-family:var(--disp);font-size:1.2rem;line-height:1.2;color:var(--char);font-variant-numeric:tabular-nums;text-align:right}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.chip.bull{background:var(--bull);color:#fff}.chip.bear{background:var(--bear);color:#fff}.chip.mute{background:var(--taupe);color:#fff}.chip.prin{background:var(--prin);color:#fff}
+.tnote{display:flex;gap:12px;align-items:flex-start;border-radius:16px;padding:14px 18px;font-size:14.5px;line-height:1.6}
+.tnote>svg{font-size:19px;margin-top:2px}
+.tnote p+p{margin-top:6px}
+.tnote.bull{background:var(--bull-t);color:#1F5E3C}.tnote.bear{background:var(--bear-t);color:#8A3526}
+.tnote.prin{background:var(--prin-t);color:#7A4312}.tnote.mute{background:#EFEAE4;color:var(--char)}
+.dark-card{background:var(--char);color:var(--isa);border-radius:24px;padding:24px 28px}
+.dk-l{font-size:11.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--peach);margin-bottom:6px}
+.dk-big{font-family:var(--disp);font-size:clamp(2rem,6vw,2.6rem);line-height:1.05;color:#fff;font-variant-numeric:tabular-nums}
+.dk-mid{font-family:var(--disp);font-size:1.5rem;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}
+.dk-sub{font-size:14px;color:var(--timb);margin-top:6px}
+.dk-stats{display:flex;gap:28px;flex-wrap:wrap}
+.dk-stats small{display:block;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:#B9B4AE;margin-bottom:4px}
+.dk-stats b{font-family:var(--disp);font-weight:400;font-size:1.2rem;color:#fff;font-variant-numeric:tabular-nums}
+.empty{border:1.5px dashed var(--timb);border-radius:22px;padding:30px 24px;text-align:center;color:var(--taupe);font-size:15px;line-height:1.6}
+.empty .ico-t{margin:0 auto 12px;width:46px;height:46px;font-size:22px}
+.empty p{max-width:420px;margin:0 auto}
+.fine{text-align:center;font-size:12.5px;line-height:1.6;color:#9C9894}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 14.5px/1 var(--body);padding:14px 22px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:background .15s,border-color .15s}
+.btn.primary{background:var(--prin);color:#fff}.btn.primary:hover{background:var(--tang)}
+.btn.ghost{background:#fff;border-color:var(--timb);color:var(--char)}.btn.ghost:hover{border-color:var(--char)}
+.btn:focus-visible{outline:2px solid var(--prin);outline-offset:2px}
+.linkback{display:inline-flex;align-items:center;gap:8px;background:none;border:0;padding:0;font:600 13.5px/1 var(--body);color:var(--taupe);cursor:pointer}
+.linkback svg{transform:rotate(180deg)}
+.linkback:hover{color:var(--char)}
+.fu{animation:fadeSlide .3s ease both}
+@media (max-width:720px){
+  .tgrid.c2{grid-template-columns:1fr}
+  .tgrid.c2.tight{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .tcard{padding:20px 18px}
+  .dark-card{padding:22px 20px}
+  .dk-stats{gap:18px}
+}
+
+.dk-big .per{font-family:var(--body);font-size:15px;font-weight:500;color:var(--timb);margin-left:6px}
+.dk-stats.inc{margin-top:20px;padding-top:18px;border-top:1px solid rgba(249,246,241,.1)}
+.dark-card.win .dk-l{color:#86CFA3}
+.prog{margin-top:20px;padding-top:6px;border-top:1px solid rgba(249,246,241,.1)}
+.split{display:flex;height:8px;border-radius:8px;overflow:hidden;margin-top:14px;background:rgba(249,246,241,.14)}
+.split .i{background:#86CFA3;border-radius:8px;transition:width .35s ease}
+.split-l{display:flex;justify-content:space-between;gap:12px;margin-top:7px;font-size:12.5px;font-weight:600;color:#E6E1DA}
+.prog .dk-sub{margin-top:10px}
+.bars{display:flex;flex-direction:column;gap:9px}
+.bar-row{display:grid;grid-template-columns:44px minmax(0,1fr) 108px;align-items:center;gap:12px}
+.bar-y{font-size:13px;font-weight:600;color:var(--taupe);font-variant-numeric:tabular-nums}
+.bar-t{height:12px;border-radius:12px;background:#EFEAE4;overflow:hidden}
+.bar-t i{display:block;height:100%;border-radius:12px;background:var(--timb);transition:width .3s ease}
+.bar-v{font-family:var(--disp);font-size:1.05rem;color:var(--taupe);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar-row.on .bar-y{color:var(--char);font-weight:700}
+.bar-row.on .bar-t i{background:var(--prin)}
+.bar-row.on .bar-v{color:var(--prin-d);font-size:1.2rem}
+.fine.l{text-align:left;margin-top:14px}
+.tnote b{font-weight:700}
+.next{display:flex;align-items:center;justify-content:space-between;gap:14px;background:#fff;border:1px solid var(--timb);border-radius:18px;padding:16px 20px;font-size:14.5px;font-weight:600;color:var(--char);transition:border-color .15s}
+.next:hover{border-color:var(--char)}
+.next:focus-visible{outline:2px solid var(--prin);outline-offset:2px}
+.next small{display:block;font-size:11.5px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--prin-d);margin-bottom:4px}
+.next svg{font-size:18px;color:var(--prin);flex:none}
+@media (max-width:640px){.bar-row{grid-template-columns:36px minmax(0,1fr) 92px;gap:8px}.bar-v{font-size:.98rem}.bar-row.on .bar-v{font-size:1.08rem}}
+
 </style>
 </head>
 <body>
-<div id="root"></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="art-income" viewBox="0 0 240 180">
+  <path d="M30 156h184" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+  <rect x="40" y="138" width="66" height="14" rx="7" fill="#F9BC8A"/>
+  <rect x="40" y="120" width="66" height="14" rx="7" fill="#F9BC8A"/>
+  <rect x="40" y="102" width="66" height="14" rx="7" fill="#F9BC8A"/>
+  <rect x="40" y="84" width="66" height="14" rx="7" fill="#F9BC8A"/>
+  <rect x="40" y="66" width="66" height="14" rx="7" fill="#FF993F"/>
+  <path d="M110 62C134 26 176 26 190 70" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>
+  <circle cx="190" cy="92" r="10" fill="#FF993F"/>
+  <rect x="164" y="138" width="52" height="14" rx="7" fill="#F9F6F1"/>
+  <rect x="164" y="120" width="52" height="14" rx="7" fill="#F9F6F1"/>
+</symbol><symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol><symbol id="i-bars" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16M7 17v-5M12 17V7M17 17v-8"/></g></symbol><symbol id="i-briefcase" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M3 13h18"/></g></symbol><symbol id="i-coins" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="10" cy="7" rx="6" ry="2.5"/><path d="M4 7v4c0 1.4 2.7 2.5 6 2.5M16 7v2.2"/><ellipse cx="14" cy="14.5" rx="6" ry="2.5"/><path d="M8 14.5v3c0 1.4 2.7 2.5 6 2.5s6-1.1 6-2.5v-3"/></g></symbol><symbol id="i-target" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".9"/></g></symbol></svg>
+<header class="nav"><div class="wrap">
+  <a class="back" href="https://the-hub-sable.vercel.app/"><svg class="ic" aria-hidden="true"><use href="#i-arrow"/></svg>the hub</a>
+  <a class="brand" href="https://the-hub-sable.vercel.app/" aria-label="demystified, the hub"><img src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20168.473%2042.639%22%20width%3D%22168.473%22%20height%3D%2242.639%22%20fill%3D%22currentColor%22%3E%3Ctitle%3Edemystified%20logomark-dots%3C/title%3E%3Cpath%20d%3D%22M21.172%2038.513C29.883%2038.513%2036.878%2032.375%2038.245%2024.308L78.126%2024.308C79.466%2032.402%2086.461%2038.513%2094.93%2038.513C103.4%2038.513%20110.636%2032.375%20112.003%2024.308L130.201%2024.308C131.541%2032.402%20138.536%2038.513%20147.006%2038.513C156.735%2038.513%20164.346%2030.901%20164.346%2021.44C164.346%2011.979%20156.735%204.126%20147.006%204.126C138.59%204.126%20131.648%2010.157%20130.228%2018.331L111.976%2018.331C110.556%2010.157%20103.587%204.126%2094.93%204.126C86.273%204.126%2079.573%2010.157%2078.152%2018.331L38.218%2018.331C36.798%2010.157%2029.829%204.126%2021.172%204.126C11.738%204.126%204.126%2011.738%204.126%2021.44C4.126%2031.142%2011.738%2038.513%2021.172%2038.513Z%22/%3E%3C/svg%3E" alt=""><b>demystified</b></a>
+</div></header>
+<section class="mhero"><div class="wrap">
+  <div>
+    <span class="crumb"><span class="sw"></span>the hub · <b>tool</b></span>
+    <h1>passive income calculator</h1>
+    <p class="anchor">see what your investments could pay you, or what it takes to reach an income goal.</p>
+  </div>
+  <div class="cover dark"><svg aria-hidden="true"><use href="#art-income"/></svg></div>
+</div></section>
+<main><div class="wrap"><div id="root"></div></div></main>
+<footer><div class="wrap">
+  <span><span class="fd"><i></i><i></i><i></i></span>the hub · passive income calculator · education only, not financial advice</span>
+  <span class="slog">first-gen, not last.</span>
+</div></footer>
 <script type="text/babel">
-const { useState } = React;
-const OR="#F5853F",RD="#D94F2A",GR="#0D9E6E",GD="#C4A460",PU="#7C5CBF",BL="#2A7ED4",DK="#1a1108",CA="#fffcf7",BD="#e8ddd0";
-const SC="#C0392B";
+    const { useState } = React;
+    const fmt = (v) => new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(v || 0);
+    const fmt2 = (v) => new Intl.NumberFormat("en-US", { style:"currency", currency:"USD", minimumFractionDigits:2, maximumFractionDigits:2 }).format(v || 0);
+    var GROWTH_URL = "https://the-hub-sable.vercel.app/tools/growth-calculator/";
+    var YIELDS = [2, 3, 4, 5, 6, 8, 10];
 
-// ── Resource links ────────────────────────────────────────────
-const LINK = {
-  ta:       "https://technical-analysis-mu.vercel.app/",
-  chain:    "https://options-chain-decoder.vercel.app/",
-  calc:     "https://options-return-calculator-dm.vercel.app/",
-  checklist:"https://pre-trade-checklist.vercel.app/",
-  econ:     "https://university.financesdemystified.com/products/communities/v2/financesdemystified/channel/ff2c22e6-5003-4a10-8a34-2ab42f3e9b15?type=forum",
-  planner1: "https://kajabi-communities-documents.s3.us-west-2.amazonaws.com/d8082a79-cf09-476a-b7de-be557072222a",
-  planner23:"https://kajabi-communities-documents.s3.us-west-2.amazonaws.com/b0f3bd36-41da-46bb-bd7b-634990968879",
-};
+    function Ic(props){ return <svg className="ic" aria-hidden="true"><use href={"#" + props.id}/></svg>; }
 
-// ── Style data ────────────────────────────────────────────────
-const STYLES = {
-  scalp: {
-    id:"scalp", label:"Scalp", color:SC,
-    desc:"Minutes to an hour · Fastest style",
-    shortDef:"Enter and exit within minutes to an hour. The fastest style — built for quick, small moves.",
-    definition:"A scalp is the fastest options trading style — you're in and out within minutes to an hour, targeting a small, quick move. Scalping requires sharp focus and very short timeframes, since the setup develops and resolves much faster than any other style. If the trade is not working within that window, the thesis is stale and you're out.",
-    conditions:"Clear index direction — not chop. Above-average volume, and VIX in a workable range. If SPY is drifting sideways on light volume, there's no edge. Don't force it.",
-    signal:"A clean break and hold of an intraday level — VWAP or a session high/low — with a volume push confirming it, HINT lining up the signal, and a clear RSI trend.",
-    hold:"Minutes to an hour. If it's not working within that window, the thesis is stale — exit.",
-    stack:"15-Min → 5-Min → 1-Min",
-    contractShort:"7–14 DTE · Delta 0.60–0.70 · risk ≤ 3%",
-    target:"20–30% gain on premium. Take it and move on. Scalps reward discipline over greed.",
-    invalid:"15–20% loss on premium — non-negotiable. The whole model breaks if you let one scalp turn into a 'hold and hope.'",
-    charts:[
-      {tf:"15-Min",color:SC,role:"Intraday Trend",q:"What is the intraday trend and bias?",checks:["Clear intraday trend direction — up for calls, down for puts","Price trending, not chopping sideways on light volume","The higher timeframe sets the bias — never let the 1-minute talk you out of what the 15-minute is telling you"]},
-      {tf:"5-Min",color:SC,role:"Structure",q:"Is a clean structure forming at a level that matters?",checks:["Price at or approaching an intraday level — VWAP or session high/low","Structure is clean and readable — not erratic","Volume building as price approaches the level"]},
-      {tf:"1-Min",color:SC,role:"Trigger",q:"Is this the exact trigger to enter?",checks:["Clean break AND hold of the level with a volume push","HINT signal lining up with the entry","Clear RSI trend confirming momentum"]},
-    ],
-    chain:{strike:"At the money, or one strike in the money",dte:"7–14 DTE",delta:"0.60–0.70",theta:"Barely matters — you're out the same session",oi:"500+",volume:"Active same-day volume on the contract itself, not just the stock",premium:"3% or less of account"},
-    green:["Clear index direction with above-average volume","VIX in a workable range (under ~22)","Break and hold of the level with volume confirming","HINT and RSI aligned with the entry"],
-    red:["SPY drifting sideways on light volume — no edge","VIX above 22–23 — noise takes you out before the thesis plays out","Entering intra-candle before the close confirms","Letting a scalp turn into a 'hold and hope'"],
-    candle:"1-min or 5-min",
-    mindset:"\"Break and hold of the level with volume, HINT lining up, RSI trending. Candle closed. In — and out within the hour, win or lose.\"",
-  },
-  daytrade: {
-    id:"daytrade", label:"Day Trade", color:RD,
-    desc:"Hours · Same-day exit",
-    shortDef:"Enter and exit the same day, holding minutes to a few hours. Faster-paced than a swing, but not as rapid as a scalp.",
-    definition:"A day trade is a same-day options trade — you enter and exit before the market closes, with no overnight exposure. Compared to a scalp, a day trade holds for a longer stretch of the session and targets a larger intraday move. It still requires a trending market and active attention, but the pace is a step slower than scalping.",
-    conditions:"Clear index direction — not chop. Above-average volume, and VIX in a workable range. Same conditions as a scalp, but you're giving the move more of the session to develop.",
-    signal:"A clean break and hold of an intraday level — VWAP or a session high/low — with volume confirming, HINT lining up the signal, and a clear RSI trend.",
-    hold:"Minutes to a few hours. In and out the same day — no overnight exposure.",
-    stack:"15-Min → 5-Min → 1-Min",
-    contractShort:"7–14 DTE · Delta 0.60–0.70 · risk ≤ 3%",
-    target:"20–30% gain on premium. Take it and move on.",
-    invalid:"15–20% loss on premium — non-negotiable. The trade is invalid the moment that level is hit.",
-    charts:[
-      {tf:"15-Min",color:RD,role:"Intraday Trend",q:"What is the intraday trend and bias?",checks:["Clear intraday trend direction — up for calls, down for puts","Price trending, not chopping sideways on light volume","The higher timeframe sets the bias for the session"]},
-      {tf:"5-Min",color:RD,role:"Structure",q:"Is a clean structure forming at a level that matters?",checks:["Price at or approaching an intraday level — VWAP or session high/low","Structure is clean and readable — not erratic","Volume building as price approaches the level"]},
-      {tf:"1-Min",color:RD,role:"Trigger",q:"Is this the exact trigger to enter?",checks:["Clean break AND hold of the level with a volume push","HINT signal lining up with the entry","Clear RSI trend confirming momentum"]},
-    ],
-    chain:{strike:"At the money, or one strike in the money",dte:"7–14 DTE",delta:"0.60–0.70",theta:"Minor factor — you're out the same session",oi:"500+",volume:"Active same-day volume on the contract itself, not just the stock",premium:"3% or less of account"},
-    green:["Clear index direction with above-average volume","VIX in a workable range","Break and hold of the level with volume confirming","HINT and RSI aligned with the entry"],
-    red:["SPY drifting sideways on light volume — no edge","VIX above 22–23 — too noisy","Entering intra-candle before the close confirms","Holding past the session into overnight risk"],
-    candle:"1-min or 5-min",
-    mindset:"\"Clear direction, real volume, level breaking and holding. I take what the session gives me and I'm flat by the close.\"",
-  },
-  swing: {
-    id:"swing", label:"Swing Trade", color:OR,
-    desc:"Several days to a few weeks",
-    shortDef:"Hold a contract for several days to a few weeks. You're positioning for a setup that needs time to develop — not just today's move.",
-    definition:"A swing trade holds an options contract for several days to a few weeks. You're not trading today's move — you're positioning for a setup that needs time to play out. Swing trading requires carrying overnight exposure, which is why the chart setup needs to be clean and well-confirmed before entry. This is the most common style for options beginners who want more time to be right without the pressure of a same-day exit.",
-    conditions:"Price at a well-tested support or resistance level, in line with the larger trend, with a momentum read confirming — RSI behavior, a clean candle signal, HINT flagging the entry. The read must line up: trend, level, pause, then decision. And the name needs a real reason to move — a catalyst or sector strength, not a random ticker someone mentioned online.",
-    signal:"A confirmed reaction at your level: a candle close in your direction off support or resistance, with momentum agreeing. Better to miss the first move and enter on confirmation than guess the bottom.",
-    hold:"Several days to a few weeks. You carry overnight exposure — the setup needs to justify it.",
-    stack:"Daily → 4-Hour → 1-Hour",
-    contractShort:"30–60 DTE · Delta 0.40–0.60 · risk 3–5%",
-    target:"2R as a baseline, scaling out as it runs. If you risked $200, your first target is +$400.",
-    invalid:"1R — typically a close beyond the level that formed your thesis. When the reason you entered is gone, you're gone.",
-    charts:[
-      {tf:"Daily",color:OR,role:"Primary Trend & Levels",q:"Which direction is the trend, and where are the levels that matter?",checks:["Primary trend direction is clear — the daily is the boss","Key support and resistance levels identified and well-tested","The name has a real reason to move — catalyst or sector strength"]},
-      {tf:"4-Hour",color:OR,role:"Structure & Entry Zone",q:"Is price setting up at one of those levels, or is it in no-man's-land?",checks:["Price at or approaching a key daily level — not floating between levels","Structure refining cleanly around the entry zone","No-man's-land = no trade. Wait for price to reach a level that matters"]},
-      {tf:"1-Hour",color:OR,role:"Trigger",q:"Is momentum actually turning here, or am I early?",checks:["Candle close in your direction off the level — confirmation, not a guess","Momentum agreeing — RSI behavior supporting the move","HINT flagging the entry"]},
-    ],
-    chain:{strike:"At the money, or one strike in the money",dte:"30–60 DTE",delta:"0.40–0.60",theta:"≤ 50% of Delta",oi:"500+",volume:"Steady daily volume on the contract — you need a clean exit days from now",premium:"3–5% of account"},
-    green:["Trend, level, pause, then decision — the full read lines up","Price at a well-tested level in line with the larger trend","Real catalyst or sector strength behind the name","Confirmed candle close at the level with momentum agreeing"],
-    red:["Price in no-man's-land between levels","Random ticker with no real reason to move","Guessing the bottom instead of waiting for confirmation","Holding a directional option into earnings — IV crush works against you"],
-    candle:"1-hour (sometimes the 4-hour)",
-    mindset:"\"Trend, level, pause, then decision. The daily is the boss. I'd rather miss the first move and enter on confirmation than guess the bottom.\"",
-  },
-  leap: {
-    id:"leap", label:"LEAP", color:PU,
-    desc:"A year or more",
-    shortDef:"A long-dated contract held for a year or more. You're expressing a high-conviction directional view — 'I believe in this company,' not 'I think it pops this week.'",
-    definition:"A LEAP (Long-term Equity AnticiPation Security) is an option contract with a year or more until expiration. Instead of trading short-term price moves, you're expressing high conviction on a quality name over a long horizon — strong fundamentals and a multi-quarter or multi-year story. A LEAP gives you stock-like exposure without tying up the full cash for shares. It's for 'I believe in this company,' not 'I think it pops this week.'",
-    conditions:"High conviction on a quality name over a long horizon: strong fundamentals, a multi-quarter or multi-year story, and you want stock-like exposure without tying up the full cash for shares.",
-    signal:"The macro structure matters — the entry is about the weekly and monthly trend and major levels, not a short-term candle. For a year-plus hold, the daily noise doesn't matter.",
-    hold:"A year or more. The whole point is buying time so a temporary dip doesn't wipe you out.",
-    stack:"Monthly → Weekly",
-    contractShort:"12+ months · Delta 0.70–0.80 · risk 3–5%",
-    target:"Let winners run and reassess at +50–100%. Often roll up to lock gains and reduce risk rather than fully exiting a name you still believe in.",
-    invalid:"A break of the major weekly or monthly trend, or a fundamental change in the story — not a short-term price dip. Exit on a broken thesis, not on noise.",
-    charts:[
-      {tf:"Monthly",color:PU,role:"Big-Picture Trend",q:"Is the long-term story and trend intact?",checks:["Clear long-term uptrend on the monthly chart","Strong fundamentals — a multi-quarter or multi-year story","No major top or trend break forming at the monthly level"]},
-      {tf:"Weekly",color:PU,role:"Major Levels",q:"Where are the major levels, and is the macro structure healthy?",checks:["Major weekly levels identified — these define your exit trigger","Weekly trend confirms the monthly story","Daily noise doesn't matter here — the macro structure does"]},
-    ],
-    chain:{strike:"Deep in the money — the contract should behave like the stock",dte:"12+ months — often 18–24",delta:"0.70–0.80 (deep ITM)",theta:"Low by design — deep ITM carries far less decay risk",oi:"500+",volume:"Thinner is normal on long-dated contracts — lean on open interest and use limit orders",premium:"3–5% of account"},
-    green:["High conviction on a quality name with strong fundamentals","12+ months of time — a temporary dip can't wipe you out","Delta 0.70–0.80 — the contract behaves like the stock (stock replacement)","Weekly and monthly trend fully aligned"],
-    red:["'I think it pops this week' thinking on a long-dated contract","A broken weekly or monthly trend — the thesis is gone","A fundamental change in the story","Exiting on short-term noise instead of a broken thesis"],
-    candle:"weekly",
-    mindset:"\"This is 'I believe in this company,' not 'I think it pops this week.' I exit on a broken thesis, not on noise.\"",
-  },
-};
+    function fieldId(label){ return "f-" + label.toLowerCase().replace(/[^a-z0-9]+/g, "-"); }
 
-const STYLE_ORDER = ["scalp","daytrade","swing","leap"];
-
-const CHAIN_META = [
-  {key:"strike",  icon:"🎯", label:"Strike Price",             why:"Sets how much of the move you actually capture. The further out of the money you go, the cheaper the contract and the more the stock has to move just to break even.", ref:"The Options Chain module covers strike selection in full detail."},
-  {key:"delta",   icon:"📡", label:"Delta",                    why:"Controls how much the contract moves per $1 move in the stock. Dominique's range for this style balances responsiveness against cost.", ref:"The Options Chain module covers Delta and all Greeks in full detail."},
-  {key:"dte",     icon:"📅", label:"DTE — Days to Expiration", why:"Matches how long you plan to hold. Shorter DTE means faster Theta decay. Your DTE must give the trade enough time to develop.", ref:"The Options Chain module covers DTE and expiration in full detail."},
-  {key:"theta",   icon:"🔢", label:"Theta",                    why:"Time decay — the value the contract loses each day simply because time is passing. How much it matters depends on how long you hold.", ref:"The Options Chain module covers Theta in full detail."},
-  {key:"oi",      icon:"📊", label:"Open Interest",            why:"Confirms the contract is liquid enough to exit cleanly. Below 500, the spread will be too wide and fills will be costly.", ref:"The Options Chain module covers Open Interest in full detail."},
-  {key:"volume",  icon:"💧", label:"Volume",                   why:"Open interest tells you how many contracts exist. Volume tells you how many are actually trading today. You need both to get filled at a fair price.", ref:"The Options Chain module covers Volume in full detail."},
-  {key:"premium", icon:"💼", label:"Premium, Position Size & Max Risk", why:"Controls your maximum loss on a single trade. Staying within this range is what protects your account through losing streaks.", ref:"The Return Calculator runs this math for you before you enter."},
-];
-
-// ── Shared components ─────────────────────────────────────────
-
-function RuleBox({rule,color}){return(<div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"8px",padding:"11px 13px",marginBottom:"10px",borderLeft:"3px solid "+(color||OR)}}><div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.12em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"6px"}}>⚡ The Rule</div><div style={{fontSize:"0.78rem",lineHeight:"1.65",color:"#e8ddd0"}}>{rule}</div></div>);}
-
-function SectionLabel({label,sub,color}){return(<div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"12px",paddingBottom:"8px",borderBottom:"2px solid #e8ddd033"}}><div style={{width:"3px",height:"22px",background:color||OR,borderRadius:"2px"}}/><div><div style={{fontWeight:"700",fontSize:"0.88rem",color:DK}}>{label}</div>{sub&&<div style={{fontSize:"0.72rem",color:"#8a7560"}}>{sub}</div>}</div></div>);}
-
-function NextBtn({label,onClick}){return(<button onClick={onClick} style={{background:OR,border:"none",borderRadius:"999px",padding:"10px 26px",color:"#fff",fontWeight:"700",fontSize:"0.82rem",letterSpacing:"0.06em",cursor:"pointer",display:"flex",alignItems:"center",gap:"6px",margin:"24px auto 0"}}>{label} →</button>);}
-
-function GreenRed({green,red,greenLabel,redLabel}){return(<div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"8px",marginTop:"10px"}}><div style={{background:"#e8faf3",borderRadius:"8px",padding:"10px 12px"}}><div style={{fontSize:"0.6rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:GR,marginBottom:"6px"}}>✅ {greenLabel||"Green flags"}</div>{green.map((g,i)=>(<div key={i} style={{display:"flex",gap:"6px",marginBottom:"4px"}}><div style={{width:"5px",height:"5px",borderRadius:"50%",background:GR,marginTop:"5px",flexShrink:0}}/><div style={{fontSize:"0.72rem",color:"#052e16",lineHeight:"1.5"}}>{g}</div></div>))}</div><div style={{background:"#fff0ee",borderRadius:"8px",padding:"10px 12px"}}><div style={{fontSize:"0.6rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:RD,marginBottom:"6px"}}>🚩 {redLabel||"Red flags"}</div>{red.map((r,i)=>(<div key={i} style={{display:"flex",gap:"6px",marginBottom:"4px"}}><div style={{width:"5px",height:"5px",borderRadius:"50%",background:RD,marginTop:"5px",flexShrink:0}}/><div style={{fontSize:"0.72rem",color:"#5a1a1a",lineHeight:"1.5"}}>{r}</div></div>))}</div></div>);}
-
-function InfoCard({icon,title,color,children}){return(<div style={{background:CA,border:"1px solid "+BD,borderRadius:"12px",padding:"14px 16px",borderLeft:"4px solid "+color}}><div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"8px"}}><span style={{fontSize:"1.1rem"}}>{icon}</span><span style={{fontWeight:"700",fontSize:"0.82rem",color:DK}}>{title}</span></div><div style={{fontSize:"0.78rem",color:"#5a4535",lineHeight:"1.6"}}>{children}</div></div>);}
-
-// ── QDA — dark tab opener, one per tab ────────────────────────
-function QDA({question,options,action,color}){
-  const c = color||OR;
-  return(
-    <div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"12px",padding:"18px 20px",marginBottom:"16px"}}>
-      <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"7px"}}>❓ The Question</div>
-      <div style={{fontFamily:"Georgia,serif",fontSize:"1.15rem",color:"#fff",lineHeight:"1.4",marginBottom:"13px"}}>{question}</div>
-
-      <div style={{display:"flex",alignItems:"center",gap:"10px",marginBottom:"13px"}}>
-        <span style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",flexShrink:0}}>⚖️ Decision</span>
-        <div style={{display:"flex",gap:"7px",alignItems:"center",flexWrap:"wrap"}}>
-          {options.map((o,i)=>(
-            <span key={o} style={{display:"inline-block",padding:"4px 13px",borderRadius:"999px",background:i===0?c:"rgba(255,255,255,0.08)",border:"1px solid "+(i===0?c:"rgba(255,255,255,0.16)"),color:i===0?"#fff":"#d4a87a",fontSize:"0.72rem",fontWeight:"700",letterSpacing:"0.04em"}}>{o}</span>
-          ))}
-        </div>
-      </div>
-
-      <div style={{borderTop:"1px solid rgba(255,255,255,0.09)",paddingTop:"12px"}}>
-        <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"6px"}}>✅ The Action</div>
-        <div style={{fontSize:"0.83rem",color:"#e8ddd0",lineHeight:"1.65"}}>{action}</div>
-      </div>
-    </div>
-  );
-}
-
-// ── Dominique's question — light, to contrast the dark blocks ─
-function DomQ({children}){
-  return(
-    <div style={{background:CA,border:"1px solid "+BD,borderLeft:"4px solid "+GD,borderRadius:"12px",padding:"16px 18px",margin:"18px 0 14px",display:"flex",gap:"13px",alignItems:"flex-start"}}>
-      <div style={{fontSize:"1.3rem",flexShrink:0,lineHeight:"1.3"}}>💬</div>
-      <div>
-        <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"6px"}}>Dominique's Question</div>
-        <div style={{fontFamily:"Georgia,serif",fontStyle:"italic",fontSize:"1rem",color:DK,lineHeight:"1.55"}}>"{children}"</div>
-      </div>
-    </div>
-  );
-}
-
-// ── Resource links ────────────────────────────────────────────
-function Resources({items}){
-  return(
-    <div style={{background:CA,border:"1px solid "+BD,borderRadius:"12px",padding:"14px 16px",marginTop:"16px"}}>
-      <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"10px"}}>🔗 Use these while you plan</div>
-      <div style={{display:"flex",flexWrap:"wrap",gap:"8px"}}>
-        {items.map(it=>(
-          <a key={it.label} href={it.url} target="_blank" rel="noopener noreferrer"
-            style={{display:"inline-flex",alignItems:"center",gap:"7px",background:"#f7f0e6",border:"1px solid "+BD,borderRadius:"999px",padding:"7px 15px",textDecoration:"none",color:DK,fontSize:"0.76rem",fontWeight:"700",transition:"all 0.15s"}}
-            onMouseOver={e=>{e.currentTarget.style.borderColor=OR;e.currentTarget.style.color=OR;}}
-            onMouseOut={e=>{e.currentTarget.style.borderColor=BD;e.currentTarget.style.color=DK;}}>
-            <span>{it.icon}</span>{it.label}<span style={{color:"#b0a090",fontSize:"0.7rem"}}>↗</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ── Bottom bridges ────────────────────────────────────────────
-function PlannerBridge(){
-  return(
-    <div style={{marginTop:"20px",background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"14px",padding:"20px 22px",display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap"}}>
-      <div style={{fontSize:"1.8rem",flexShrink:0}}>📝</div>
-      <div style={{flex:1,minWidth:"200px"}}>
-        <div style={{fontSize:"0.65rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"5px"}}>Write the plan down</div>
-        <div style={{fontFamily:"Georgia,serif",fontSize:"1rem",color:"#fff",marginBottom:"5px"}}>Fill out the Trade Planner before you place the order.</div>
-        <div style={{fontSize:"0.78rem",color:"#d4a87a",lineHeight:"1.55"}}>A plan you can't write down in three steps isn't a plan yet.</div>
-      </div>
-      <a href={LINK.planner23} target="_blank" rel="noopener noreferrer"
-        style={{flexShrink:0,background:OR,borderRadius:"999px",padding:"10px 22px",fontWeight:"700",fontSize:"0.8rem",color:"#fff",letterSpacing:"0.06em",whiteSpace:"nowrap",textDecoration:"none",display:"inline-block"}}>
-        Open Trade Planner →
-      </a>
-    </div>
-  );
-}
-
-function ChecklistBridge(){
-  return(
-    <div style={{marginTop:"12px",background:CA,border:"1px solid "+BD,borderLeft:"4px solid "+OR,borderRadius:"14px",padding:"20px 22px",display:"flex",alignItems:"center",gap:"16px",flexWrap:"wrap"}}>
-      <div style={{fontSize:"1.8rem",flexShrink:0}}>📋</div>
-      <div style={{flex:1,minWidth:"200px"}}>
-        <div style={{fontSize:"0.65rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#8a7560",marginBottom:"5px"}}>One last pass</div>
-        <div style={{fontFamily:"Georgia,serif",fontSize:"1rem",color:DK,marginBottom:"5px"}}>Run the Pre-Trade Checklist before entering any trade.</div>
-        <div style={{fontSize:"0.78rem",color:"#5a4535",lineHeight:"1.55"}}>Five questions that confirm the plan you just built holds up.</div>
-      </div>
-      <a href={LINK.checklist} target="_blank" rel="noopener noreferrer"
-        style={{flexShrink:0,background:DK,borderRadius:"999px",padding:"10px 22px",fontWeight:"700",fontSize:"0.8rem",color:"#fff",letterSpacing:"0.06em",whiteSpace:"nowrap",textDecoration:"none",display:"inline-block"}}>
-        Open Checklist →
-      </a>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-// TAB 1 — BEFORE THE TRADE
-// ═══════════════════════════════════════════════════════════════
-function TabBefore({style,onNext}){
-  const fast = style && (style.id==="scalp" || style.id==="daytrade");
-  const vixBody = style
-    ? (fast
-        ? "Scalps and day trades need tighter conditions because you have no time to be wrong. Above 22–23 VIX, Dominique either steps aside or cuts size hard. The noise takes you out before the thesis has a chance to play out."
-        : "Below 20 is Dominique's comfortable zone. She starts trimming size when VIX pushes above 25, and above 30 she's mostly in cash or sticking to defined-risk setups only. Elevated VIX means wider swings and pricier premium — not the environment to be a hero.")
-    : "Below 20 is Dominique's comfortable zone. She trims size above 25, and above 30 she's mostly in cash or defined-risk setups only. Faster styles need tighter conditions than that: above 22–23 VIX on a scalp or day trade, step aside or cut size hard.";
-
-  return(
-    <div className="fu">
-      <QDA
-        question="Does today's market support trading?"
-        options={["Trade","Wait"]}
-        action="If the context is clean, continue to the setup. If it isn't, walk away and keep your capital. Preparation is where the trade is won or lost, and there is always another day."
-        color={PU}
-      />
-
-      <SectionLabel label="Morning Sequence — In Order" sub="Complete these before evaluating any stock." color={PU}/>
-
-      <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",overflow:"hidden",marginBottom:"16px"}}>
-        {[
-          {n:"1",color:PU,title:"SPY & QQQ — broad market direction",body:"Are futures up or down? Is there clear index direction, or is the market drifting sideways on light volume? A significant gap changes the volatility environment and can invalidate setups that looked clean the night before."},
-          {n:"2",color:PU,title:"VIX — market fear level",body:vixBody},
-          {n:"3",color:OR,title:"Sector ETFs — where is money rotating?",body:"SPY and QQQ for broad direction, then XLK (technology), XLF (financials), XLE (energy), and XLV (healthcare) to see where money is rotating. When defensive sectors lead, that tells you as much as the index level does."},
-          {n:"4",color:OR,title:"Economic calendar — what is scheduled today?",body:"CPI, Fed decisions, jobs numbers. A release in the middle of your hold window can override a clean chart in seconds. Know what's coming before you commit capital, not after."},
-          {n:"5",color:GD,title:"Earnings and news scan",body:"Dominique doesn't avoid trading before earnings — the volatility and volume can be good for trading. What she avoids is HOLDING a directional option into earnings. That's gambling on a coin flip with IV crush working against you. The exception is an intentional, pre-planned earnings play — a different decision, not a normal setup."},
-          {n:"6",color:GR,title:"Review your watchlist charts",body:"Dominique keeps 15–20 names she knows cold. Better to deeply know 15 tickers' personalities than shallowly track 60. Revisit the charts you marked up the night before — did anything change overnight?"},
-          {n:"7",color:GR,title:"Narrow to your one trade",body:"From everything above, identify the single best setup. If nothing is clean, there is no trade. One fully-evaluated setup beats three half-checked ones every time."},
-        ].map((s,i,arr)=>(
-          <div key={s.n} style={{display:"flex",gap:"12px",alignItems:"flex-start",padding:"12px 16px",borderBottom:i<arr.length-1?"1px solid "+BD:"none"}}>
-            <div style={{width:"26px",height:"26px",borderRadius:"50%",background:s.color,color:"#fff",fontWeight:"700",fontSize:"0.78rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginTop:"1px"}}>{s.n}</div>
-            <div><div style={{fontWeight:"700",fontSize:"0.85rem",color:DK,marginBottom:"3px"}}>{s.title}</div><div style={{fontSize:"0.78rem",color:"#5a4535",lineHeight:"1.55"}}>{s.body}</div></div>
+    function MoneyInput(props) {
+      var label = props.label, value = props.value, onChange = props.onChange, hint = props.hint;
+      var id = fieldId(label);
+      return (
+        <div className="field">
+          <label className="field-l" htmlFor={id}>{label}{hint ? <span className="field-h">{hint}</span> : null}</label>
+          <div className="inp"><span>$</span>
+            <input id={id} type="text" inputMode="decimal" value={value} placeholder="0"
+              onChange={function(e){ var v = e.target.value; if (v === "" || /^\d*\.?\d*$/.test(v)) onChange(v); }} />
           </div>
-        ))}
-      </div>
-
-      <SectionLabel label="Watchlist Criteria" sub="What earns a stock a spot on the list." color={PU}/>
-      <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"16px"}}>
-        <InfoCard icon="📈" title="A name you know cold" color={GR}>Dominique keeps 15–20 tickers she deeply knows — their personalities, their levels, how they move. A focused watchlist is a feature, not a limitation.</InfoCard>
-        <InfoCard icon="💧" title="High liquidity" color={BL}>Minimum 1 million average daily shares traded. Low volume means wide spreads and difficult exits.</InfoCard>
-        <InfoCard icon="🔢" title="Active options market" color={OR}>Open interest of 500+ on the contracts you're considering. Below that the bid/ask spread will be too wide.</InfoCard>
-        <InfoCard icon="🎯" title="A real reason to move" color={RD}>A catalyst or sector strength — not a random ticker someone mentioned online. If you can't say why it should move, it doesn't belong on the list.</InfoCard>
-      </div>
-
-      <RuleBox rule="One great trade beats several mediocre ones. If nothing on the list is clean today, the correct action is no trade at all. Sitting out is a decision, not a missed opportunity." color={PU}/>
-
-      <DomQ>If I didn't already have this idea, would I still be excited about it today?</DomQ>
-
-      <Resources items={[
-        {icon:"📊",label:"Technical Analysis",url:LINK.ta},
-        {icon:"🗓️",label:"Economic Calendar",url:LINK.econ},
-        {icon:"📝",label:"Trade Planner — Step One",url:LINK.planner1},
-      ]}/>
-
-      <NextBtn label="Next: Validate the Setup" onClick={onNext}/>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-// TAB 2 — VALIDATE THE SETUP
-// ═══════════════════════════════════════════════════════════════
-const UNIVERSAL_GREEN = [
-  "Price is at a level that matters — a well-tested support or resistance",
-  "Your timeframes agree: the higher chart sets the bias, the lower one times the entry",
-  "Volume is confirming the move, not fading into it",
-  "The name has a real reason to move — a catalyst or sector strength",
-  "The candle closed at the level, confirming the reaction",
-];
-const UNIVERSAL_RED = [
-  "Price is in no-man's-land between levels",
-  "The timeframes disagree — the lower chart says one thing, the higher chart another",
-  "Thin volume and choppy, unreadable structure",
-  "You can't say in one sentence why this name should move",
-  "You're guessing the turn instead of waiting for the close",
-];
-
-function TabValidate({onNext}){
-  return(
-    <div className="fu">
-      <QDA
-        question="Is the setup valid?"
-        options={["Yes","No"]}
-        action="If it's valid, continue and choose the style that fits it. If it isn't, wait. A setup you have to argue for is a setup you don't have."
-        color={GR}
-      />
-
-      <SectionLabel label="Green Flags and Red Flags" sub="What confirms the setup, and what kills it." color={GR}/>
-      <GreenRed green={UNIVERSAL_GREEN} red={UNIVERSAL_RED}/>
-
-      <div style={{marginTop:"20px"}}>
-        <SectionLabel label="The Chart Stack — Three Timeframes, Three Jobs" sub="The exact charts depend on the style you choose next. The roles never change." color={GR}/>
-        <div className="g2" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"10px",marginBottom:"16px"}}>
-          {[
-            {n:"1",color:PU,title:"Higher timeframe",desc:"Sets the bias. This chart is the boss. Never let the fastest chart talk you out of what the slowest one is telling you."},
-            {n:"2",color:OR,title:"Middle timeframe",desc:"Shows the structure and the entry zone. Is price actually arriving at a level, or floating between them?"},
-            {n:"3",color:GR,title:"Lower timeframe",desc:"Times the trigger only. It never overrules the bias. It just tells you when to act on it."},
-          ].map(s=>(
-            <div key={s.n} style={{background:CA,border:"1px solid "+BD,borderRadius:"10px",padding:"14px",borderTop:"3px solid "+s.color}}>
-              <div style={{width:"24px",height:"24px",borderRadius:"50%",background:s.color,color:"#fff",fontWeight:"700",fontSize:"0.78rem",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:"8px"}}>{s.n}</div>
-              <div style={{fontWeight:"700",fontSize:"0.82rem",color:DK,marginBottom:"4px"}}>{s.title}</div>
-              <div style={{fontSize:"0.72rem",color:"#5a4535",lineHeight:"1.5"}}>{s.desc}</div>
-            </div>
-          ))}
         </div>
-      </div>
+      );
+    }
 
-      <SectionLabel label="Entry Timeframe — What Counts as a Level" sub="If you can't name the level, you don't have an entry." color={GR}/>
-      <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"16px"}}>
-        <InfoCard icon="📍" title="A well-tested level" color={GR}>Support or resistance that price has respected more than once. One touch is a coincidence. Several touches make it a level other traders are watching too.</InfoCard>
-        <InfoCard icon="📊" title="VWAP and session levels" color={BL}>For intraday work, VWAP and the session high or low are the levels that matter. That's where the volume actually sits.</InfoCard>
-        <InfoCard icon="🌫️" title="No-man's-land" color={RD}>Price floating between levels with nothing nearby above or below. There's no reference point, so there's nothing to be right or wrong against. No level means no trade.</InfoCard>
-        <InfoCard icon="🕯️" title="Confirmation" color={GD}>Confirmation means the candle closed. Not "it looks like it's holding." Not "it's about to break." Closed. Everything before the close is a rumor, and rumors reverse.</InfoCard>
-      </div>
+    function SliderInput(props) {
+      var label = props.label, value = props.value, onChange = props.onChange;
+      var min = props.min, max = props.max, step = props.step || 1;
+      var suffix = props.suffix || "", color = props.color || "#FF993F";
+      var pct = Math.min(100, Math.max(0, ((value - min) / ((max - min) || 1)) * 100));
+      var bg = "linear-gradient(to right," + color + " 0%," + color + " " + pct + "%,#E6E1DA " + pct + "%,#E6E1DA 100%)";
+      return (
+        <div className="slider">
+          <div className="slider-top"><span className="field-l">{label}</span><span className="slider-v">{value.toLocaleString()}{suffix}</span></div>
+          <input type="range" aria-label={label} min={min} max={max} step={step} value={value}
+            onInput={function(e){ onChange(Number(e.target.value)); }}
+            onChange={function(e){ onChange(Number(e.target.value)); }}
+            style={{ background:bg, "--thumb":color }} />
+        </div>
+      );
+    }
 
-      <RuleBox rule="If you can't point to the level on the chart and say why price should react there, you don't have a setup. You have a hope. Wait for price to come to a level that matters." color={GR}/>
+    function Segmented(props) {
+      var options = props.options, value = props.value, onChange = props.onChange;
+      var label = props.label, small = props.small;
+      return (
+        <div className={small ? "field" : "field lg"}>
+          {label ? <span className="field-l">{label}</span> : null}
+          <div className={"seg" + (small ? " sm" : "")} role="group" aria-label={label || "Timeline"}>
+            {options.map(function(opt){
+              return <button key={opt[0]} type="button" aria-pressed={value === opt[0]} onClick={function(){ onChange(opt[0]); }}>{opt[1]}</button>;
+            })}
+          </div>
+        </div>
+      );
+    }
 
-      <Resources items={[{icon:"📊",label:"Technical Analysis",url:LINK.ta}]}/>
+    /* Timeline: either a straight year count or two ages */
+    function TimelineInput(props) {
+      var mode = props.mode, setMode = props.setMode;
+      var years = props.years, setYears = props.setYears;
+      var curAge = props.curAge, setCurAge = props.setCurAge;
+      var endAge = props.endAge, setEndAge = props.setEndAge;
+      var derived = Math.max(1, endAge - curAge);
 
-      <NextBtn label="Next: Choose the Style" onClick={onNext}/>
-    </div>
-  );
-}
+      function handleCurAge(v) {
+        setCurAge(v);
+        if (endAge <= v) setEndAge(Math.min(90, v + 1));
+      }
+      function handleEndAge(v) {
+        setEndAge(Math.max(v, curAge + 1));
+      }
 
-// ═══════════════════════════════════════════════════════════════
-// TAB 3 — CHOOSE THE STYLE
-// ═══════════════════════════════════════════════════════════════
-function ChartStackStatic({style}){
-  return(
-    <div>
-      {style.charts.map((tf,idx)=>(
-        <div key={tf.tf} style={{background:CA,border:"1px solid "+BD,borderLeft:"4px solid "+tf.color,borderRadius:"12px",padding:"14px 16px",marginBottom:"8px"}}>
-          <div style={{display:"flex",alignItems:"center",gap:"12px",marginBottom:"10px"}}>
-            <div style={{width:"26px",height:"26px",borderRadius:"50%",background:tf.color,color:"#fff",fontWeight:"700",fontSize:"0.75rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{idx+1}</div>
-            <div style={{flex:1}}>
-              <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap",marginBottom:"2px"}}>
-                <span style={{fontWeight:"700",fontSize:"0.88rem",color:DK}}>{tf.tf} Chart</span>
-                <span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:tf.color+"18",color:tf.color,fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase"}}>{tf.role}</span>
-              </div>
-              <div style={{fontSize:"0.73rem",color:"#8a7560",fontStyle:"italic"}}>"{tf.q}"</div>
+      return (
+        <div>
+          <Segmented small options={[["years","years"],["ages","ages"]]} value={mode} onChange={setMode} />
+          {mode === "years" ? (
+            <SliderInput label="Investment Period" value={years} onChange={setYears} min={1} max={50} suffix=" yrs" color="#3A3F4A" />
+          ) : (
+            <div>
+              <SliderInput label="Current Age" value={curAge} onChange={handleCurAge} min={18} max={80} suffix=" yrs" color="#3A3F4A" />
+              <SliderInput label="Target Age" value={endAge} onChange={handleEndAge} min={19} max={90} suffix=" yrs" color="#3A3F4A" />
+              <div className="derived"><span className="kv-k">Investment Period</span><span className="slider-v">{derived} yrs</span></div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function EmptyState(props) {
+      return <div className="empty"><span className="ico-t"><Ic id={props.icon} /></span><p>{props.text}</p></div>;
+    }
+
+    function yieldRows(current) {
+      var ys = YIELDS.slice();
+      if (ys.indexOf(current) === -1) ys.push(current);
+      return ys.sort(function(a, b){ return a - b; });
+    }
+
+    /* one row per yield, the member's own yield highlighted */
+    function Bars(props) {
+      var rows = props.rows, max = Math.max.apply(null, rows.map(function(r){ return r.n; }).concat([1]));
+      return (
+        <div className="bars">
+          {rows.map(function(r){ return (
+            <div key={r.y} className={"bar-row" + (r.on ? " on" : "")}>
+              <span className="bar-y">{r.y + "%"}</span>
+              <div className="bar-t"><i style={{ width: Math.max(1.5, r.n / max * 100) + "%" }} /></div>
+              <span className="bar-v">{r.text}</span>
+            </div>
+          ); })}
+        </div>
+      );
+    }
+
+    function YieldNote() {
+      return (
+        <div className="tnote prin"><Ic id="i-coins" /><div>
+          <p><b>income yield</b> is the cash your investments pay you in a year (like dividends, interest or rent), as a percent of what you have invested.</p>
+          <p>it is not your total return. whether the investments themselves go up or down in value is separate, and isn’t part of this calculator.</p>
+        </div></div>
+      );
+    }
+
+    function NextLink(props) {
+      return <a className="next" href={GROWTH_URL}><span><small>{props.kicker}</small>{props.text}</span><Ic id="i-arrow" /></a>;
+    }
+
+    function IncomeTab(props) {
+      var n = parseFloat(props.invested) || 0, y = props.rate;
+      var annual = n * y / 100, monthly = annual / 12;
+      return (
+        <div className="stack">
+          <div className="tcard">
+            <div className="tcard-h"><span className="ico-t"><Ic id="i-briefcase" /></span>your investments</div>
+            <div className="tgrid c2 form">
+              <MoneyInput label="Amount Invested" value={props.invested} onChange={props.setInvested} hint="What you have invested" />
+              <SliderInput label="Annual Income Yield" value={y} onChange={props.setRate} min={0.5} max={15} step={0.25} suffix="%" color="#FF993F" />
             </div>
           </div>
-          {tf.checks.map((c,i)=>(
-            <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start",marginBottom:"6px",padding:"9px 12px",background:"#f7f0e6",borderRadius:"8px"}}>
-              <div style={{width:"18px",height:"18px",borderRadius:"50%",border:"2px solid "+tf.color,flexShrink:0,marginTop:"1px"}}/>
-              <div style={{fontSize:"0.79rem",color:"#3d2e1e",lineHeight:"1.55"}}>{c}</div>
-            </div>
-          ))}
-        </div>
-      ))}
-      <RuleBox rule="Work the charts in order. If a timeframe fails, stop there. Do not move to the next chart looking for permission to trade." color={style.color}/>
-    </div>
-  );
-}
 
-function StyleCard({st,isOpen,onToggle}){
-  return(
-    <div style={{marginBottom:"8px"}}>
-      <div onClick={onToggle} style={{display:"flex",alignItems:"center",gap:"12px",padding:"15px 16px",cursor:"pointer",background:isOpen?"#fffcf7":CA,border:"1px solid "+(isOpen?st.color:BD),borderRadius:isOpen?"12px 12px 0 0":"12px",borderLeft:"4px solid "+st.color,transition:"all 0.15s"}}>
-        <div style={{flex:1}}>
-          <div style={{display:"flex",alignItems:"center",gap:"9px",flexWrap:"wrap",marginBottom:"3px"}}>
-            <span style={{fontFamily:"Georgia,serif",fontSize:"1.05rem",fontWeight:"700",color:DK}}>{st.label}</span>
-            <span style={{display:"inline-block",padding:"2px 9px",borderRadius:"999px",background:st.color+"18",color:st.color,fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase"}}>{st.desc}</span>
-            {isOpen&&<span style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:st.color}}>· Selected</span>}
-          </div>
-          <div style={{fontSize:"0.76rem",color:"#8a7560",lineHeight:"1.5"}}>{st.shortDef}</div>
-        </div>
-        <span style={{color:"#8a7560",fontSize:"13px",flexShrink:0,transition:"transform 0.2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)"}}>▼</span>
-      </div>
-
-      {isOpen&&(
-        <div className="fu" style={{border:"1px solid "+st.color,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"16px",background:CA}}>
-          <div style={{fontSize:"0.85rem",color:"#3d2e1e",lineHeight:"1.7",marginBottom:"14px"}}>{st.definition}</div>
-
-          <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"12px"}}>
-            {[
-              {icon:"🎯",label:"When to use it",body:st.conditions,color:st.color},
-              {icon:"📡",label:"Entry signal",body:st.signal,color:st.color},
-              {icon:"⏱️",label:"Hold time",body:st.hold,color:GD},
-              {icon:"💼",label:"Position size",body:st.chain.premium,color:GR},
-            ].map(item=>(
-              <div key={item.label} style={{background:"#f7f0e6",borderRadius:"10px",padding:"12px 14px",borderLeft:"3px solid "+item.color}}>
-                <div style={{display:"flex",alignItems:"center",gap:"6px",marginBottom:"6px"}}>
-                  <span style={{fontSize:"1rem"}}>{item.icon}</span>
-                  <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:item.color}}>{item.label}</div>
+          {n <= 0 ? (
+            <EmptyState icon="i-coins" text="Enter an amount invested to see the income it could pay you." />
+          ) : (
+            <div className="stack">
+              <div className="dark-card">
+                <div className="dk-l">passive income</div>
+                <div className="dk-big">{fmt(monthly)}<span className="per"> a month</span></div>
+                <div className="dk-sub">{"from " + fmt(n) + " invested at a " + y + "% income yield"}</div>
+                <div className="dk-stats inc">
+                  <div><small>Per Year</small><b>{fmt(annual)}</b></div>
+                  <div><small>Per Week</small><b>{fmt(annual / 52)}</b></div>
+                  <div><small>Per Day</small><b>{fmt2(annual / 365)}</b></div>
                 </div>
-                <div style={{fontSize:"0.78rem",color:"#3d2e1e",lineHeight:"1.55"}}>{item.body}</div>
               </div>
-            ))}
-          </div>
 
-          <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"12px"}}>
-            <div style={{background:"#e8faf3",borderRadius:"10px",padding:"13px 15px",borderLeft:"4px solid "+GR}}>
-              <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:GR,marginBottom:"7px"}}>🎯 Profit Target</div>
-              <div style={{fontSize:"0.83rem",color:"#052e16",lineHeight:"1.6",fontWeight:"700"}}>{st.target}</div>
+              <div className="tcard">
+                <div className="tcard-h"><span className="ico-t"><Ic id="i-bars" /></span>the same money at other yields</div>
+                <Bars rows={yieldRows(y).map(function(r){ var m = n * r / 100 / 12; return { y:r, n:m, text:fmt(m) + "/mo", on:r === y }; })} />
+              </div>
             </div>
-            <div style={{background:"#fff0ee",borderRadius:"10px",padding:"13px 15px",borderLeft:"4px solid "+RD}}>
-              <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:RD,marginBottom:"7px"}}>⛔ Trade Invalidation</div>
-              <div style={{fontSize:"0.83rem",color:"#5a1a1a",lineHeight:"1.6",fontWeight:"700"}}>{st.invalid}</div>
-            </div>
-          </div>
+          )}
 
-          <GreenRed green={st.green} red={st.red} greenLabel={"Green flags — "+st.label} redLabel={"Red flags — "+st.label}/>
-
-          <div style={{marginTop:"18px"}}>
-            <SectionLabel label={"📈 Chart Stack — "+st.stack} sub="Work through them in order. All must pass." color={st.color}/>
-            <ChartStackStatic style={st}/>
-          </div>
+          <YieldNote />
+          <NextLink kicker="want this number bigger?" text="see how the amount invested can grow · long-term growth calculator" />
+          <p className="fine">Income is shown before taxes and fees and assumes the yield stays the same. Yields change over time.</p>
         </div>
-      )}
-    </div>
-  );
-}
+      );
+    }
 
-function ComparisonTable(){
-  return(
-    <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",overflow:"hidden",marginTop:"16px"}}>
-      <div style={{background:"#f0e8da",padding:"12px 16px",borderBottom:"1px solid "+BD}}>
-        <div style={{fontWeight:"700",fontSize:"0.82rem",color:DK}}>📋 All Styles — Quick Comparison</div>
-        <div style={{fontSize:"0.72rem",color:"#8a7560",marginTop:"2px"}}>See how the requirements differ across all four styles</div>
-      </div>
-      <div style={{overflowX:"auto"}}>
-        <table style={{width:"100%",borderCollapse:"collapse",minWidth:"560px"}}>
-          <thead>
-            <tr style={{background:"#f7f0e6"}}>
-              {["Criterion","Scalp","Day Trade","Swing","LEAP"].map(h=>(<th key={h} style={{padding:"9px 14px",fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.08em",textTransform:"uppercase",color:"#8a7560",textAlign:"left"}}>{h}</th>))}
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ["Hold time","Minutes–1 hour","Minutes–hours","Days–weeks","A year or more"],
-              ["Chart stack","15m → 5m → 1m","15m → 5m → 1m","Daily → 4H → 1H","Monthly → Weekly"],
-              ["DTE","7–14 days","7–14 days","30–60 days","12+ months"],
-              ["Delta","0.60–0.70","0.60–0.70","0.40–0.60","0.70–0.80"],
-              ["Theta","Barely matters","Minor factor","≤ 50% of Delta","Low by design"],
-              ["Risk per trade","≤ 3%","≤ 3%","3–5%","3–5%"],
-              ["Profit target","20–30%","20–30%","2R, scale out","Reassess at +50–100%"],
-              ["Trade invalidation","15–20%","15–20%","1R / broken level","Broken weekly/monthly trend"],
-            ].map((row,i)=>(
-              <tr key={i} style={{borderBottom:"1px solid "+BD,background:i%2===0?"transparent":"#faf5ee"}}>
-                <td style={{padding:"10px 14px",fontWeight:"700",fontSize:"0.82rem",color:DK}}>{row[0]}</td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:SC+"18",color:SC,fontSize:"0.72rem",fontWeight:"700"}}>{row[1]}</span></td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:RD+"18",color:RD,fontSize:"0.72rem",fontWeight:"700"}}>{row[2]}</span></td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:OR+"18",color:OR,fontSize:"0.72rem",fontWeight:"700"}}>{row[3]}</span></td>
-                <td style={{padding:"10px 14px"}}><span style={{display:"inline-block",padding:"2px 8px",borderRadius:"999px",background:PU+"18",color:PU,fontSize:"0.72rem",fontWeight:"700"}}>{row[4]}</span></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function TabStyle({style,styleId,onSelect,onNext}){
-  return(
-    <div className="fu">
-      <QDA
-        question="How long should this trade reasonably take to reach my target?"
-        options={["Minutes","Hours","Weeks","Months"]}
-        action="Open the style that matches your honest answer. You're not choosing an identity or becoming a swing trader. You're estimating how long this one idea needs to work, and that estimate decides the contract you buy."
-        color={OR}
-      />
-
-      <SectionLabel label="Four Styles" sub="Open one to see how it works. The style you open is the one the next two tabs use." color={OR}/>
-
-      {STYLE_ORDER.map(id=>(
-        <StyleCard key={id} st={STYLES[id]} isOpen={styleId===id} onToggle={()=>onSelect(id)}/>
-      ))}
-
-      <ComparisonTable/>
-
-      {style
-        ? <NextBtn label="Next: Build the Contract" onClick={onNext}/>
-        : <div style={{marginTop:"20px",textAlign:"center",background:"#f0e8da",border:"1px dashed #d9c9b2",borderRadius:"12px",padding:"16px",fontSize:"0.8rem",color:"#8a7560"}}>
-            Open a style above to continue. The contract criteria and the entry checks are set by the style you choose.
-          </div>}
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-// TAB 4 — BUILD THE CONTRACT
-// ═══════════════════════════════════════════════════════════════
-function ChainCriteria({style,open,toggle}){
-  return(
-    <div>
-      {CHAIN_META.map(meta=>{
-        const isOpen=open===meta.key;
-        const accent = style?style.color:GD;
-        const value = style?style.chain[meta.key]:null;
-        return(
-          <div key={meta.key} style={{marginBottom:"8px"}}>
-            <div onClick={()=>toggle(meta.key)} style={{display:"flex",alignItems:"center",gap:"12px",padding:"13px 16px",cursor:"pointer",background:isOpen?"#fffcf7":CA,border:"1px solid "+(isOpen?accent:BD),borderRadius:isOpen?"12px 12px 0 0":"12px",borderLeft:"4px solid "+accent,transition:"all 0.15s"}}>
-              <span style={{fontSize:"1.15rem",flexShrink:0}}>{meta.icon}</span>
-              <div style={{flex:1}}>
-                <div style={{display:"flex",alignItems:"center",gap:"8px",flexWrap:"wrap",marginBottom:"2px"}}>
-                  <span style={{fontWeight:"700",fontSize:"0.88rem",color:DK}}>{meta.label}</span>
-                  {value&&<span style={{display:"inline-block",padding:"2px 9px",borderRadius:"999px",background:accent+"18",color:accent,fontSize:"0.68rem",fontWeight:"700"}}>{value.length>34?value.slice(0,32)+"…":value}</span>}
-                </div>
-                <div style={{fontSize:"0.72rem",color:"#8a7560"}}>{style?"Tap to see why this matters for a "+style.label.toLowerCase():"Tap to compare all four styles"}</div>
-              </div>
-              <span style={{color:"#8a7560",fontSize:"13px",flexShrink:0,transition:"transform 0.2s",transform:isOpen?"rotate(180deg)":"rotate(0deg)"}}>▼</span>
+    function GoalTab(props) {
+      var _g = useState("5000"), goal = _g[0], setGoal = _g[1];
+      var _p = useState("month"), per = _p[0], setPer = _p[1];
+      var g = parseFloat(goal) || 0, y = props.rate, have = parseFloat(props.invested) || 0;
+      var annualGoal = per === "month" ? g * 12 : g, monthlyGoal = annualGoal / 12;
+      var capital = annualGoal / (y / 100);
+      var pct = capital > 0 ? Math.min(100, have / capital * 100) : 0;
+      var haveMonthly = have * y / 100 / 12;
+      return (
+        <div className="stack">
+          <div className="tcard">
+            <div className="tcard-h"><span className="ico-t"><Ic id="i-target" /></span>your income goal</div>
+            <Segmented small label="Income goal" value={per} onChange={setPer} options={[["month","per month"],["year","per year"]]} />
+            <div className="tgrid c2 form">
+              <MoneyInput label={per === "month" ? "Monthly Income Goal" : "Yearly Income Goal"} value={goal} onChange={setGoal} hint="The income you want your money to pay" />
+              <SliderInput label="Annual Income Yield" value={y} onChange={props.setRate} min={0.5} max={15} step={0.25} suffix="%" color="#FF993F" />
+              <MoneyInput label="Already Invested" value={props.invested} onChange={props.setInvested} hint="Optional · shows how far along you are" />
             </div>
-            {isOpen&&(
-              <div className="fu" style={{border:"1px solid "+accent,borderTop:"none",borderRadius:"0 0 12px 12px",padding:"14px 16px",background:CA}}>
-                {style?(
-                  <div style={{background:"#f7f0e6",borderRadius:"8px",padding:"12px 14px",marginBottom:"10px"}}>
-                    <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:accent,marginBottom:"6px"}}>Required for {style.label}</div>
-                    <div style={{fontFamily:"Georgia,serif",fontSize:"1.05rem",fontWeight:"700",color:DK,marginBottom:"6px"}}>{value}</div>
-                    <div style={{fontSize:"0.8rem",color:"#3d2e1e",lineHeight:"1.6"}}>{meta.why}</div>
-                  </div>
-                ):(
-                  <div style={{marginBottom:"10px"}}>
-                    <div style={{fontSize:"0.8rem",color:"#3d2e1e",lineHeight:"1.6",marginBottom:"10px"}}>{meta.why}</div>
-                    {STYLE_ORDER.map(id=>(
-                      <div key={id} style={{display:"flex",gap:"10px",alignItems:"flex-start",padding:"8px 12px",background:"#f7f0e6",borderRadius:"8px",marginBottom:"6px",borderLeft:"3px solid "+STYLES[id].color}}>
-                        <div style={{fontSize:"0.72rem",fontWeight:"700",color:STYLES[id].color,minWidth:"78px"}}>{STYLES[id].label}</div>
-                        <div style={{fontSize:"0.78rem",color:"#3d2e1e",lineHeight:"1.5"}}>{STYLES[id].chain[meta.key]}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {meta.key==="premium"&&(
-                  <div style={{background:"#e8faf3",borderRadius:"8px",padding:"11px 13px",marginBottom:"10px"}}>
-                    <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.12em",textTransform:"uppercase",color:"#065f46",marginBottom:"6px"}}>🧮 Worked example</div>
-                    <div style={{fontSize:"0.79rem",color:"#052e16",lineHeight:"1.65"}}>
-                      Account of $10,000, risking 3%. That's $300 of maximum risk on this trade. The contract is trading at $1.30, so one contract costs $1.30 × 100 = $130. Two contracts is $260, which fits under $300. Three contracts is $390, which does not. You buy two.
+          </div>
+
+          {g <= 0 ? (
+            <EmptyState icon="i-target" text="Enter the income you want to see how much you’d need invested." />
+          ) : (
+            <div className="stack">
+              <div className={"dark-card" + (have >= capital ? " win" : "")}>
+                <div className="dk-l">invested capital needed</div>
+                <div className="dk-big">{fmt(capital)}</div>
+                <div className="dk-sub">{"to pay " + fmt(monthlyGoal) + " a month (" + fmt(annualGoal) + " a year) at a " + y + "% income yield"}</div>
+                {have > 0 ? (
+                  <div className="prog">
+                    <div className="split"><div className="i" style={{ width: pct + "%" }} /></div>
+                    <div className="split-l">
+                      <span>{have >= capital ? "you’re there" : "you have " + (pct < 1 ? "under 1" : Math.floor(pct)) + "% of it"}</span>
+                      <span>{have >= capital ? fmt(have - capital) + " above the goal" : fmt(capital - have) + " to go"}</span>
                     </div>
+                    <div className="dk-sub">{"today, " + fmt(have) + " would pay about " + fmt(haveMonthly) + " a month at this yield."}</div>
                   </div>
-                )}
-                <div style={{fontSize:"0.72rem",color:"#8a7560",fontStyle:"italic",paddingTop:"4px"}}>→ {meta.ref}</div>
+                ) : null}
               </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
-function TabContract({style,onNext}){
-  const[open,setOpen]=useState(null);
-  const toggle=id=>setOpen(p=>p===id?null:id);
-  const accent = style?style.color:OR;
-
-  return(
-    <div className="fu">
-      <QDA
-        question="Does this contract support my thesis?"
-        options={["Yes","No"]}
-        action="If every criterion passes, the contract is built. If one fails, adjust the contract — a different strike, a different expiration, fewer contracts. Never adjust the thesis to fit the contract."
-        color={accent}
-      />
-
-      <div style={{background:"#fff4eb",border:"1px solid #fad0a8",borderRadius:"10px",padding:"11px 14px",marginBottom:"16px",display:"flex",gap:"10px",alignItems:"flex-start"}}>
-        <span style={{fontSize:"0.9rem",flexShrink:0}}>💡</span>
-        <div style={{fontSize:"0.77rem",color:"#5a4535",lineHeight:"1.55"}}>The Options Chain module explains what each of these terms means. This tab gives you <strong>Dominique's specific requirements</strong> for each one. {style?"The values below are set for "+style.label+".":"Choose a style on the previous tab and these values set themselves."}</div>
-      </div>
-
-      <SectionLabel label="Contract Criteria — All Must Pass" sub={style?"Set for "+style.label+". Tap each to see why it matters.":"Tap each to compare across all four styles."} color={accent}/>
-      <ChainCriteria style={style} open={open} toggle={toggle}/>
-
-      {style&&<RuleBox rule={"Final contract check for a "+style.label.toLowerCase()+": "+style.chain.delta+" Delta · "+style.chain.dte+" · OI "+style.chain.oi+" · "+style.chain.premium+". If one criterion fails, there is no trade, regardless of how good the chart looks."} color={style.color}/>}
-
-      <DomQ>Does this contract give my thesis enough time to work?</DomQ>
-
-      <Resources items={[
-        {icon:"⛓️",label:"The Options Chain",url:LINK.chain},
-        {icon:"🧮",label:"Return Calculator",url:LINK.calc},
-        {icon:"📝",label:"Trade Planner — Steps Two & Three",url:LINK.planner23},
-      ]}/>
-
-      <NextBtn label="Next: Execute the Trade" onClick={onNext}/>
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════════════════════════
-// TAB 5 — EXECUTE THE TRADE
-// ═══════════════════════════════════════════════════════════════
-function TabExecute({style}){
-  const candleTf = style ? style.candle : "confirmation";
-  const accent = style?style.color:OR;
-
-  return(
-    <div className="fu">
-      <QDA
-        question="Is my plan complete?"
-        options={["Enter","Wait"]}
-        action="If everything below is defined in writing, place the order. If anything is still an assumption in your head, it isn't a plan yet."
-        color={accent}
-      />
-
-      <SectionLabel label="Final Checks — In Order" color={accent}/>
-
-      <div style={{display:"flex",flexDirection:"column",gap:"10px",marginBottom:"18px"}}>
-        {[
-          {n:"1",color:GR,icon:"🕐",
-            title:"Is my entry level confirmed on the chart?",
-            body:"Wait for the "+candleTf+" candle to fully close at your level. Intra-candle entries get faked out constantly. The close is the truth — everything before it is a rumor.",
-            rule:"Wait for the candle close. The close is the truth. Everything before it is a rumor."},
-          {n:"2",color:accent,icon:"📋",
-            title:"Have I run every contract criterion?",
-            body:style
-              ? "Final check: "+style.chain.delta+" Delta · "+style.chain.dte+" · OI "+style.chain.oi+" · "+style.chain.premium+". If any one fails, do not enter — regardless of how good the chart looks."
-              : "Strike, Delta, DTE, Theta, open interest, volume, and premium against account size. If any one fails, do not enter — regardless of how good the chart looks.",
-            rule:"The criteria are not optional. Running them every time is the difference between a process and a gamble."},
-          {n:"3",color:PU,icon:"⛔",
-            title:"Do I know my exit before I enter?",
-            body:style
-              ? "Profit target: "+style.target.split(".")[0]+". Invalidation: "+style.invalid.split(".")[0]+". Both defined now — while you're calm — not while watching the position move."
-              : "Your profit target and your invalidation level both get written down now — while you're calm — not while watching the position move.",
-            rule:"Never enter a trade without knowing exactly where you exit at a win and where the thesis is invalid. Both are set before the order is placed."},
-        ].map(item=>(
-          <div key={item.n} style={{background:CA,border:"1px solid "+BD,borderRadius:"12px",padding:"16px 18px",borderLeft:"4px solid "+item.color}}>
-            <div style={{display:"flex",gap:"14px",alignItems:"flex-start"}}>
-              <div style={{width:"32px",height:"32px",borderRadius:"50%",background:item.color,color:"#fff",fontWeight:"700",fontSize:"0.9rem",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{item.n}</div>
-              <div style={{flex:1}}>
-                <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"6px"}}>
-                  <span style={{fontSize:"1.1rem"}}>{item.icon}</span>
-                  <span style={{fontWeight:"700",fontSize:"0.9rem",color:DK}}>{item.title}</span>
-                </div>
-                <div style={{fontSize:"0.82rem",color:"#5a4535",lineHeight:"1.6",marginBottom:"10px"}}>{item.body}</div>
-                <RuleBox rule={item.rule} color={item.color}/>
+              <div className="tcard">
+                <div className="tcard-h"><span className="ico-t"><Ic id="i-bars" /></span>the same goal at other yields</div>
+                <Bars rows={yieldRows(y).map(function(r){ var c = annualGoal / (r / 100); return { y:r, n:c, text:fmt(c), on:r === y }; })} />
+                <p className="fine l">A higher yield needs less money invested, but a higher yield usually comes with more risk.</p>
               </div>
             </div>
+          )}
+
+          <YieldNote />
+          <NextLink kicker={g > 0 ? "how do i get to " + fmt(capital) + "?" : "how do i get there?"} text="plan the path · goal planner in the long-term growth calculator" />
+          <p className="fine">Income is shown before taxes and fees and assumes the yield stays the same. Yields change over time.</p>
+        </div>
+      );
+    }
+
+    function App() {
+      var _t = useState("income"), tab = _t[0], setTab = _t[1];
+      var _i = useState("100000"), invested = _i[0], setInvested = _i[1];
+      var _r = useState(5), rate = _r[0], setRate = _r[1];
+      var TABS = [["income","income","i-coins"],["goal","income goal","i-target"]];
+      return (
+        <div className="stack">
+          <div className="seg big" role="group" aria-label="Calculator">
+            {TABS.map(function(x){ return (
+              <button key={x[0]} type="button" aria-pressed={tab === x[0]} onClick={function(){ setTab(x[0]); }}><Ic id={x[2]} />{x[1]}</button>
+            ); })}
           </div>
-        ))}
-      </div>
-
-      <SectionLabel label="Timing & Order Type" sub="Dominique's execution mechanics." color={accent}/>
-      <div className="g2" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"10px",marginBottom:"18px"}}>
-        <InfoCard icon="⏰" title="Time of Day" color={OR}>Dominique likes the mid-morning window after the open settles — roughly 10:00 to 11:30 AM ET. She avoids the first 5 to 10 minutes because that opening volatility is a trap, and she's cautious in the lunchtime lull when volume thins out and moves get unreliable.</InfoCard>
-        <InfoCard icon="📝" title="Limit vs. Market" color={GR}>A combination of both. Limit orders to enter at your price, especially on wider spreads. Market orders only when you need to get out now and speed beats precision.</InfoCard>
-        <InfoCard icon="🕯️" title="Candle Confirmation" color={GD}>Swing: the 1-hour close, sometimes the 4-hour. Scalp and day trade: the 1-minute or 5-minute close. LEAP: the weekly. Whatever the style, wait for the close.</InfoCard>
-        <InfoCard icon="💬" title={style?"The mindset — "+style.label:"The mindset"} color={accent}>{style?style.mindset:"\"I know why I'm in, how long I expect to be in, and exactly what tells me I'm wrong. If I can't say all three out loud, I don't have a trade yet.\""}</InfoCard>
-      </div>
-
-      <SectionLabel label="Final Review" sub="Say these out loud before the order goes in." color={accent}/>
-      <div style={{background:CA,border:"1px solid "+BD,borderRadius:"14px",overflow:"hidden",marginBottom:"18px"}}>
-        {[
-          {q:"What is my entry level?",a:"A specific price, not a zone you'll figure out later."},
-          {q:"What is my profit target?",a:style?style.target.split(".")[0]+".":"A specific number, defined before you enter."},
-          {q:"What invalidates this trade?",a:style?style.invalid.split(".")[0]+".":"The specific condition that proves the thesis wrong."},
-          {q:"How many contracts, and what is my max risk in dollars?",a:"A dollar figure you can say out loud, sized to your account."},
-          {q:"Is any of this still in my head instead of on the planner?",a:"If yes, write it down first. The order can wait ninety seconds."},
-        ].map((r,i,arr)=>(
-          <div key={i} style={{padding:"12px 16px",borderBottom:i<arr.length-1?"1px solid "+BD:"none"}}>
-            <div style={{fontWeight:"700",fontSize:"0.83rem",color:DK,marginBottom:"3px"}}>{r.q}</div>
-            <div style={{fontSize:"0.77rem",color:"#5a4535",lineHeight:"1.55"}}>{r.a}</div>
-          </div>
-        ))}
-      </div>
-
-      <DomQ>If this trade moved against me immediately, would I still trust my plan?</DomQ>
-
-      <div style={{background:"linear-gradient(130deg,#1a1108,#2c1d0e)",borderRadius:"14px",padding:"22px 24px",marginTop:"20px"}}>
-        <div style={{fontSize:"0.65rem",fontWeight:"700",letterSpacing:"0.15em",textTransform:"uppercase",color:"#9a7a55",marginBottom:"8px"}}>🗺️ End of module</div>
-        <div style={{fontFamily:"Georgia,serif",fontSize:"1.35rem",color:"#fff",marginBottom:"14px"}}>Your Trade Plan Is Complete</div>
-        <div style={{fontSize:"0.8rem",color:"#d4a87a",marginBottom:"12px"}}>You now have:</div>
-        {[
-          "A market thesis",
-          "A validated setup",
-          "The appropriate trading style"+(style?" — "+style.label:""),
-          "A contract that supports your thesis",
-          "Defined risk",
-          "Defined profit target",
-          "A completed Trade Planner",
-        ].map((t,i)=>(
-          <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start",padding:"6px 0"}}>
-            <span style={{color:GR,fontSize:"0.85rem",flexShrink:0}}>✅</span>
-            <span style={{fontSize:"0.85rem",color:"#e8ddd0",lineHeight:"1.5"}}>{t}</span>
-          </div>
-        ))}
-        <div style={{marginTop:"14px",paddingTop:"14px",borderTop:"1px solid rgba(255,255,255,0.09)",fontFamily:"Georgia,serif",fontSize:"1rem",color:"#fff"}}>
-          Now you're ready to place the trade.
+          {tab === "income" ? <IncomeTab invested={invested} setInvested={setInvested} rate={rate} setRate={setRate} /> : null}
+          {tab === "goal" ? <GoalTab invested={invested} setInvested={setInvested} rate={rate} setRate={setRate} /> : null}
         </div>
-      </div>
+      );
+    }
 
-      <Resources items={[
-        {icon:"🧮",label:"Return Calculator",url:LINK.calc},
-        {icon:"📝",label:"Trade Planner (completed)",url:LINK.planner23},
-      ]}/>
-
-      <PlannerBridge/>
-      <ChecklistBridge/>
-
-      <div style={{marginTop:"20px",textAlign:"center",fontSize:"0.65rem",color:"#b0a090",letterSpacing:"0.05em"}}>
-        <span style={{fontFamily:"Georgia,serif",fontStyle:"italic"}}>demystified</span> · For educational purposes only
-      </div>
-    </div>
-  );
-}
-
-// ── Selected-style chip ───────────────────────────────────────
-function StyleChip({style,onClear}){
-  if(!style) return null;
-  return(
-    <div style={{display:"flex",alignItems:"center",gap:"9px",background:style.color+"12",border:"1px solid "+style.color+"55",borderRadius:"999px",padding:"5px 7px 5px 14px",marginBottom:"12px",width:"fit-content"}}>
-      <span style={{fontSize:"0.7rem",color:"#8a7560",fontWeight:"600"}}>Planning as</span>
-      <span style={{fontSize:"0.76rem",fontWeight:"700",color:style.color}}>{style.label}</span>
-      <button onClick={onClear} style={{background:"none",border:"none",cursor:"pointer",color:"#8a7560",fontSize:"0.8rem",lineHeight:"1",padding:"3px 6px"}}>✕</button>
-    </div>
-  );
-}
-
-// ── App ───────────────────────────────────────────────────────
-const TABS=[
-  {label:"Before",   icon:"☀️"},
-  {label:"Validate", icon:"📈"},
-  {label:"Style",    icon:"🎚️"},
-  {label:"Contract", icon:"⛓️"},
-  {label:"Execute",  icon:"🚀"},
-];
-
-function App(){
-  const[styleId,setStyleId]=useState(null);
-  const[tab,setTab]=useState(0);
-  const style = styleId?STYLES[styleId]:null;
-
-  function goTab(i){ setTab(i); window.scrollTo({top:0,behavior:"smooth"}); }
-  function selectStyle(id){ setStyleId(p=>p===id?null:id); }
-
-  return(
-    <div>
-      <div style={{background:DK,padding:"11px 20px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <span style={{fontFamily:"Georgia,serif",fontStyle:"italic",fontSize:"1.2rem",color:"#fff"}}>demystified</span>
-        <a href="https://options101-hub.vercel.app/"
-          style={{display:"flex",alignItems:"center",gap:"6px",background:"rgba(255,255,255,0.08)",border:"1px solid rgba(255,255,255,0.14)",borderRadius:"999px",padding:"5px 14px",textDecoration:"none"}}
-          onMouseOver={e=>e.currentTarget.style.background="rgba(255,255,255,0.15)"}
-          onMouseOut={e=>e.currentTarget.style.background="rgba(255,255,255,0.08)"}>
-          <span style={{color:"#d4a87a",fontSize:"0.8rem"}}>←</span>
-          <span style={{fontSize:"0.65rem",fontWeight:"700",letterSpacing:"0.1em",textTransform:"uppercase",color:"#d4a87a"}}>Options 101 Hub</span>
-        </a>
-        <div style={{width:"22px",height:"22px",background:OR,borderRadius:"5px"}}/>
-      </div>
-
-      <div style={{maxWidth:"860px",margin:"0 auto",padding:"22px 16px 60px"}}>
-        <div style={{marginBottom:"14px"}}>
-          <div style={{fontSize:"0.62rem",fontWeight:"700",letterSpacing:"0.14em",textTransform:"uppercase",color:"#8a7560",marginBottom:"6px"}}>Module 5</div>
-          <h1 style={{fontFamily:"Georgia,serif",fontSize:"clamp(1.7rem,4vw,2.3rem)",color:DK,letterSpacing:"-0.03em",lineHeight:"1.15",marginBottom:"4px"}}>Trade Planning</h1>
-          <p style={{color:"#8a7560",fontSize:"0.85rem"}}>From market open to order placed.</p>
-        </div>
-
-        <StyleChip style={style} onClear={()=>setStyleId(null)}/>
-
-        <div style={{display:"flex",gap:"3px",background:"#e4d8c8",borderRadius:"12px",padding:"3px",marginBottom:"10px"}}>
-          {TABS.map((t,i)=>(
-            <button key={i} onClick={()=>goTab(i)} style={{
-              flex:1,padding:"9px 4px",border:"none",borderRadius:"9px",cursor:"pointer",
-              fontWeight:"700",fontSize:"0.62rem",letterSpacing:"0.02em",transition:"all 0.18s",
-              background:tab===i?"#fff":"transparent",
-              color:tab===i?(style?style.color:OR):"#8a7560",
-              boxShadow:tab===i?"0 1px 6px rgba(0,0,0,0.09)":"none",lineHeight:"1.3"}}>
-              <div>{t.icon}</div>
-              <div style={{marginTop:"2px"}}>{t.label}</div>
-            </button>
-          ))}
-        </div>
-
-        <div style={{height:"3px",background:"#e4d8c8",borderRadius:"2px",marginBottom:"20px"}}>
-          <div style={{height:"100%",width:((tab/(TABS.length-1))*100)+"%",background:style?style.color:OR,borderRadius:"2px",transition:"width 0.4s ease"}}/>
-        </div>
-
-        {tab===0&&<TabBefore   style={style} onNext={()=>goTab(1)}/>}
-        {tab===1&&<TabValidate onNext={()=>goTab(2)}/>}
-        {tab===2&&<TabStyle    style={style} styleId={styleId} onSelect={selectStyle} onNext={()=>goTab(3)}/>}
-        {tab===3&&<TabContract style={style} onNext={()=>goTab(4)}/>}
-        {tab===4&&<TabExecute  style={style}/>}
-      </div>
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
 </script>
 </body>
 </html>
